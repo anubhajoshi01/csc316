@@ -1,0 +1,33 @@
+#resetButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  width: 42px;
+  height: 42px;
+
+  background: black;
+  color: white;
+
+  border: 1px solid white;
+  border-radius: 50%;
+
+  font-size: 22px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+#resetButton:hover {
+  background: white;
+  color: black;
+  transform: rotate(-90deg);
+}
+
+#resetButton:active {
+  transform: rotate(-180deg) scale(0.95);
+}
