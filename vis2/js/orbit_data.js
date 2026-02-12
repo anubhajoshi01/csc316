@@ -3,6 +3,7 @@ function orbitData(csvPath, discardNonPlanets = true) {
         // Select desired features and convert types
         return {
             name: d.eName.replace(/ /g, "-"),       // html-friendly for classes/ids
+            realName: d.eName,
             orbits_planet: d.orbits.replace(/ /g, "-"),
             orbit_type: d.orbit_type,
             discovery_year: d.discoveryDate,
