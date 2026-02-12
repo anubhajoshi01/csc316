@@ -8,10 +8,10 @@ let visSvg = d3.select("#chart-area").append("svg")
 			.attr("height", HEIGHT);
 
 visSvg.append("circle")
+    .attr("class", "sun")
     .attr("r", 30)
-    .style("fill", "#efbf44")
     .attr("cy", HEIGHT / 2)
-    .attr("cx", 40)
+    .attr("cx", 40);
 
 function drawVis(data, planetsOnly) {
     console.log("the data", data);
@@ -25,15 +25,25 @@ function drawVis(data, planetsOnly) {
         .data(planetsData)
 
     planets.enter().append("circle")
-        .attr("class", "planet")
+        .attr("class", p => `planet ${p.name.toLowerCase()}`)
         .attr("id", (p) => "id" + p.name)
-        .style("fill", "black")
         .attr("cy", (p, i) => {     // spread out the planets idk
             let yval = i % 2 == 0 ? -i : i
             return (p.semi_major_axis) + HEIGHT / 2 + yval * 15
         })
         .attr("cx", (p, i) => (p.semi_major_axis * 16) + 70)
-        .attr("r", 4)
+        .attr("r", 8)
+
+    // Saturn ring
+    const saturn = d3.select("#idSaturn");
+
+    visSvg.insert("ellipse", "#idSaturn")
+        .attr("class", "saturn-ring")
+        .attr("cx", saturn.attr("cx"))
+        .attr("cy", saturn.attr("cy"))
+        .attr("rx", saturn.attr("r") * 3)
+        .attr("ry", saturn.attr("r") * 1.5)
+        .attr("transform", `rotate(-20 ${saturn.attr("cx")} ${saturn.attr("cy")})`);
     
     // add some labels
     let planetLabels = visSvg.selectAll(".planet-label")
@@ -78,8 +88,6 @@ function drawVis(data, planetsOnly) {
     moons.enter().append("circle")
         .attr("class", "moon")
         .attr("id", (m) => m.name)
-        .style("fill", "teal")
-        .style("opacity", 0.5)
         .attr("cy", (m, i) => {
             // get host planet location
             // console.log(m.name, m.orbits_planet, m.orbit_type, i%15*7)
