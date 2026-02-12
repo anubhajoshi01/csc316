@@ -35,6 +35,16 @@ function drawVis(data, planetsOnly) {
         .attr("cx", (p, i) => (p.semi_major_axis * 16) + 70)
         .attr("r", 4)
     
+    // add some labels
+    let planetLabels = visSvg.selectAll(".planet-label")
+        .data(planetsData)
+
+    planetLabels.enter().append("text")
+        .text((p) => p.realName)
+        .attr("class", "planet-label")
+        .attr("x", (p) => +d3.select("#id" + p.name).attr("cx") + 10)
+        .attr("y", (p) => +d3.select("#id" + p.name).attr("cy") + 10)
+    
     // some silly asteroids / comets -- non-planets with primary orbits
     // let asteroidData = data.filter((body) => !body.is_planet && body.orbit_type === "Primary")
     // console.log("asteroids etc", asteroidData)
