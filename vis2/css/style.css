@@ -1,0 +1,47 @@
+/* Sun */
+.sun {
+    fill: #FDB813;
+    stroke: #E08B00;
+    stroke-width: 2px;
+    opacity: 1;
+    filter: drop-shadow(0 0 10px rgba(253, 184, 19, 0.6));
+}
+
+/* Planets */
+.planet {
+    stroke: rgba(0, 0, 0, 0.35);
+    stroke-width: 1px;
+    opacity: 0.95;
+
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(var(--scale, 1));
+}
+
+/* Planet subclasses */
+
+.planet.mercury { fill: #b7b7b7; --scale: 0.55; }
+.planet.venus   { fill: #d7b36a; --scale: 0.90; }
+.planet.earth   { fill: #4a90e2; --scale: 0.95; }
+.planet.mars    { fill: #c65a3a; --scale: 0.70; }
+
+.planet.jupiter { fill: #caa07a; --scale: 2.20; }
+.planet.saturn  { fill: #e6d28a; --scale: 1.90; }
+.planet.uranus  { fill: #76c7c0; --scale: 1.25; }
+.planet.neptune { fill: #3b5bd6; --scale: 1.20; }
+.plant.other { fill: black; --scale: 0.45; }
+
+/* Moons */
+.moon {
+    fill: grey;
+    opacity: 0.5;
+    stroke: rgba(0, 0, 0, 0.2);
+    stroke-width: 0.5px;
+}
+
+/* Saturn ring */
+.saturn-ring {
+    fill: none;
+    stroke: #c8be96;
+    stroke-width: 3px;
+}
