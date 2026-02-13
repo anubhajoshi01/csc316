@@ -87,7 +87,7 @@ function drawVis(data, planetsOnly) {
     
     moons.enter().append("circle")
         .attr("class", "moon")
-        .attr("id", (m) => m.name)
+        .attr("id", (m) => "id" + m.name)
         .attr("cy", (m, i) => {
             // get host planet location
             // console.log(m.name, m.orbits_planet, m.orbit_type, i%15*7)
@@ -102,4 +102,49 @@ function drawVis(data, planetsOnly) {
             return hostX + offset * 50
         })
         .attr("r", 2)
+
+    // add year ranges, for timeline bar at the top 
+    let minYear = d3.min(data, (d) => d.discovery_year);
+    let maxYear = d3.max(data, (d) => d.discovery_year);
+    console.log("minyear", minYear)
+    console.log("maxyear", maxYear)
+    
+    // the number of sections we wanna have? subject to change
+    const NUM_TIMEPERIODS = 5;
+
+    const sectionWidth = 800 / NUM_TIMEPERIODS;
+    let colors = ["#074665ff", "#1670a1ff", "#3dafd2ff", "#4fcaddff", "#6cdae0ff", "#a4f1f1ff"]
+
+    // make it interactive
+    for (let i = 0; i <= NUM_TIMEPERIODS; i++) {
+        visSvg.append("rect")
+            .attr("id", "time-section-" + i)
+            .attr("x", 50 + i * sectionWidth)
+            .attr("y", 50)
+            .attr("width", sectionWidth)
+            .attr("height", 10)
+            .style("fill", colors[i]);
+        d3.select("#time-section-" + i).on("mouseover", function() {
+            d3.select(this).style("fill", "red")
+                .attr("height", 15)
+                .attr("y", 47.5);
+            for (let body of data) {
+                if ((body.discovery_year <= minYear + (i+1) * (maxYear - minYear) / NUM_TIMEPERIODS)
+                    && (body.discovery_year > minYear + i * (maxYear - minYear) / NUM_TIMEPERIODS)) {
+                    d3.select("#id" + body.name).style("fill", "red");
+                    console.log("body", body.name, body.discovery_year)
+                }
+            }
+        });
+        d3.select("#time-section-" + i).on("mouseout", function() {
+            d3.select(this).style("fill", colors[i])
+                .attr("height", 10)
+                .attr("y", 50);
+            for (let body of data) {
+                if (body.discovery_year <= minYear + (i+1) * (maxYear - minYear) / NUM_TIMEPERIODS) {
+                    d3.select("#id" + body.name).style("fill", null);
+                }
+            }
+        });
+    }
 }

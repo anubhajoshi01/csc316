@@ -1,10 +1,19 @@
 function orbitData(csvPath, discardNonPlanets = true) {
     return d3.csv(csvPath, function(d) {
         // Select desired features and convert types
+        let cleanName = d.eName.replace(/ /g, "-");  
+        cleanName = cleanName.replace(/\//g, "-");
+        cleanName = cleanName.replace(/\(/g, "-");     // html-friendly for classes/ids
+        cleanName = cleanName.replace(/\)/g, "-");     // html-friendly for classes/ids
+
+        let cleanOrbits = d.orbits.replace(/ /g, "-");       // html-friendly for classes/ids
+        cleanOrbits = cleanOrbits.replace(/\//g, "-");
+        cleanOrbits = cleanOrbits.replace(/\(/g, "-");     // html-friendly for classes/ids
+        cleanOrbits = cleanOrbits.replace(/\)/g, "-");     // html-friendly for classes/ids
         return {
-            name: d.eName.replace(/ /g, "-"),       // html-friendly for classes/ids
+            name: cleanName,
             realName: d.eName,
-            orbits_planet: d.orbits.replace(/ /g, "-"),
+            orbits_planet: cleanOrbits,
             orbit_type: d.orbit_type,
             discovery_year: d.discoveryDate,
             is_planet: d.isPlanet === "TRUE",
