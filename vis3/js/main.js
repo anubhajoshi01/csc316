@@ -1,4 +1,4 @@
-// mass.js
+// main.js
 let svg = d3.select("#vis3").append("svg")
     .attr('width', 1100)
     .attr('height', 520)
