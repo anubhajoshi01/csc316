@@ -256,3 +256,8 @@ d3.csv(DATA_PATH).then(rows => {
     console.error(err);
     alert("CSV load failed. Put sol_data.csv in data/ and run a local server.");
 });
+
+window.updateDominanceFromOutside = function(name){
+    AName = name;
+    update();
+};

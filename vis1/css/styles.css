@@ -31,3 +31,179 @@
 #resetButton:active {
   transform: rotate(-180deg) scale(0.95);
 }
+
+.vis2{
+  --bg:#0b0f17;
+  --panel:#101827;
+  --text:#e8eefc;
+  --muted:#9fb0d0;
+  --stroke:#2a3550;
+  --a:#7dd3fc;
+  --b:#c4b5fd;
+
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+}
+
+.vis2 .wrap{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 22px 16px 36px;
+}
+
+.vis2 h1{
+  margin:0 0 6px 0;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.vis2 .sub{
+  margin:0 0 14px 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.vis2 .panel{
+  position: relative;
+  isolation: isolate;
+  background: color-mix(in oklab, var(--panel) 92%, black 8%);
+  border:1px solid color-mix(in oklab, var(--stroke) 75%, black 25%);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.28);
+}
+
+.vis2 .controls{
+  position: relative;
+  z-index: 10;
+  display:flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: end;
+  margin-bottom: 12px;
+}
+
+.vis2 .field label{
+  display:block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.vis2 .chip{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background:#0c1322;
+  border:1px solid var(--stroke);
+  color: var(--muted);
+  font-size: 12px;
+  user-select:none;
+}
+
+.vis2 .kpis{
+  position: relative;
+  z-index: 2;
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.vis2 .kpi{
+  flex:1;
+  min-width: 180px;
+  background:#0c1322;
+  border:1px solid var(--stroke);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.vis2 .kpi .t{
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.vis2 .kpi .v{
+  margin-top: 6px;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.vis2 #vis{
+  display:block;
+  position: relative;
+  z-index: 0;
+  pointer-events: none;
+}
+.vis2 #vis *{ pointer-events:none; }
+
+.vis2 .dropdown{
+  width: 220px;
+  position: relative;
+}
+
+.vis2 .dd-btn{
+  width: 100%;
+  background:#0c1322;
+  border:1px solid var(--stroke);
+  color: var(--text);
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size: 13px;
+}
+
+.vis2 .dd-btn .muted{
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.vis2 .dd-menu{
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 260px;
+  overflow:auto;
+  background:#0c1322;
+  border:1px solid var(--stroke);
+  border-radius: 12px;
+  box-shadow: 0 18px 50px rgba(0,0,0,.4);
+  display:none;
+  z-index: 9999;
+}
+
+.vis2 .dd-menu.open{ display:block; }
+
+.vis2 .dd-item{
+  padding: 9px 10px;
+  cursor:pointer;
+  font-size: 13px;
+  border-bottom: 1px solid color-mix(in oklab, var(--stroke) 55%, transparent 45%);
+}
+
+.vis2 .dd-item:last-child{ border-bottom:none; }
+
+.vis2 .dd-item:hover{
+  background: color-mix(in oklab, #1a2a4a 60%, #0c1322 40%);
+}
+
+.vis2 .dd-item.active{
+  background: color-mix(in oklab, #223a66 60%, #0c1322 40%);
+}
+
+.vis2 .staticBox{
+  width: 220px;
+  background:#0c1322;
+  border:1px solid var(--stroke);
+  color: var(--muted);
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+}
