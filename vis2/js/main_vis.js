@@ -34,6 +34,20 @@ function drawVis(data, planetsOnly) {
         .attr("cx", (p, i) => (p.semi_major_axis * 16) + 70)
         .attr("r", 8)
 
+    // Sun -> planets
+    const SUN_X = 40;
+    const SUN_Y = HEIGHT / 2;
+
+    visSvg.selectAll(".planet-link")
+        .data(planetsData)
+        .enter().append("line")
+        .attr("class", "planet-link")
+        .attr("x1", SUN_X)
+        .attr("y1", SUN_Y)
+        .attr("x2", p => +d3.select("#id" + p.name).attr("cx"))
+        .attr("y2", p => +d3.select("#id" + p.name).attr("cy"))
+        .lower();
+
     // Saturn ring
     const saturn = d3.select("#idSaturn");
 
@@ -102,4 +116,5 @@ function drawVis(data, planetsOnly) {
             return hostX + offset * 50
         })
         .attr("r", 2)
+
 }

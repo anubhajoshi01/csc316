@@ -45,3 +45,9 @@
     stroke: #c8be96;
     stroke-width: 3px;
 }
+
+.planet-link {
+    stroke: #888;
+    stroke-width: 1px;
+    opacity: 0.6;
+}
