@@ -1,0 +1,16 @@
+.navBtn {
+      background: black;          /* black inside */
+      color: white;               /* text color white */
+      border: 2px solid white;    /* white outline */
+      padding: 14px 40px;
+      font-size: 18px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .navBtn:hover {
+      background: white;          /* white background on hover */
+      color: black;               /* black text on hover */
+      border: 2px solid white;
+    }

@@ -66,7 +66,7 @@ function drawPackedSun(data, containerName = "Sun") {
     .attr("font-family", "sans-serif")
     .attr("font-size", "14px")
     .attr("fill", "white")
-    .text(`Hover over a body to see volume relative to ${containerName}`);
+    .text(`Hover over a body to see volume relative to ${containerName} and discovery date`);
 
   // --- Draw bodies ---
   const bodyCircles = svg.append("g")
@@ -98,7 +98,7 @@ function drawPackedSun(data, containerName = "Sun") {
         .text(discoveryText);
     })
     .on("mouseout", () => {
-      hoverText.text(`Hover over a body to see volume relative to ${containerName}`);
+      hoverText.text(`Hover over a body to see volume relative to ${containerName} and discovery date`);
     })
     .on("click", (event, d) => {
       body = d.name;
