@@ -1,4 +1,4 @@
-const DATA_PATH = "./data/sol_data.csv";
+const DATA_PATH = "data/sol_data.csv";
 
 const fmtSci = d3.format(".3~s");
 const fmtRatio = (x) => {
@@ -69,7 +69,7 @@ function drawScale(){
     svg.selectAll("*").remove();
 
     const cx = W/2;
-    const pivotY = 170;
+    const pivotY = 170; // (你要更紧凑可以改 130)
     const beamLen = Math.min(520, W*0.86);
 
     svg.append("circle")
@@ -150,57 +150,57 @@ function setPanRotation(panSel, deg){
 }
 
 function computePools(){
-    const sun = all.find(d => d.eName === "Sun");
-
     const planets = all.filter(d => d.isPlanet);
     const nonSunAll = all.filter(d => d.eName !== "Sun");
 
     const basePool = planetsOnly.property("checked") ? planets : nonSunAll;
 
     const A = all.find(d => d.eName === AName);
-    const AVol = A ? A.volume : NaN;
+    const AMass = A ? A.mass : NaN;
 
     let othersLabel = "All others (excluding Sun)";
     let othersPool = basePool.filter(d => d.eName !== "Sun" && d.eName !== AName);
 
+    // Special case: if A is Sun => Sun vs all planets (excluding Sun)
     if (AName === "Sun"){
         othersLabel = "All planets (excluding Sun)";
         othersPool = planets.filter(d => d.eName !== "Sun");
     }
 
-    const othersVol = d3.sum(othersPool, d => d.volume);
+    const othersMass = d3.sum(othersPool, d => d.mass);
 
-    return { A, AVol, othersVol, othersLabel, othersPool };
+    return { AMass, othersMass, othersLabel };
 }
 
 function update(){
-    const { AVol, othersVol, othersLabel, othersPool } = computePools();
+    const { AMass, othersMass, othersLabel } = computePools();
 
     document.getElementById("bLabel").textContent = othersLabel;
 
-    const ratio = AVol / othersVol;
+    const ratio = AMass / othersMass;
     const ang = angleFromRatio(ratio);
 
-    document.getElementById("kpiRatio").textContent = (isFinite(ratio) && othersVol > 0) ? fmtRatio(ratio) : "—";
-    document.getElementById("kpiA").textContent = isFinite(AVol) ? fmtSci(AVol) : "—";
-    document.getElementById("kpiB").textContent = (isFinite(othersVol) && othersVol > 0) ? fmtSci(othersVol) : "—";
+    document.getElementById("kpiRatio").textContent = (isFinite(ratio) && othersMass > 0) ? fmtRatio(ratio) : "—";
+    document.getElementById("kpiA").textContent = isFinite(AMass) ? fmtSci(AMass) : "—";
+    document.getElementById("kpiB").textContent = (isFinite(othersMass) && othersMass > 0) ? fmtSci(othersMass) : "—";
 
     d3.select("#leftPanG").select("text.panLabel").text(AName || "—");
     d3.select("#rightPanG").select("text.panLabel").text("Others");
 
-    const volList = all.filter(d => d.eName !== "Sun").map(d => d.volume);
-    const vMin = d3.min(volList), vMax = d3.max(volList);
+    // ball sizes by mass (cube root)
+    const massList = all.filter(d => d.eName !== "Sun").map(d => d.mass);
+    const mMin = d3.min(massList), mMax = d3.max(massList);
 
     const rScale = d3.scaleSqrt()
-        .domain([Math.cbrt(vMin), Math.cbrt(vMax)])
+        .domain([Math.cbrt(mMin), Math.cbrt(mMax)])
         .range([10, 34]);
 
-    if (leftBall && isFinite(AVol)){
-        const aForSize = (AName === "Sun" && isFinite(AVol)) ? vMax : AVol;
+    if (leftBall && isFinite(AMass)){
+        const aForSize = (AName === "Sun" && isFinite(AMass)) ? mMax : AMass;
         leftBall.transition().duration(350).attr("r", rScale(Math.cbrt(aForSize)));
     }
-    if (rightBall && isFinite(othersVol) && othersVol > 0){
-        rightBall.transition().duration(350).attr("r", rScale(Math.cbrt(othersVol)));
+    if (rightBall && isFinite(othersMass) && othersMass > 0){
+        rightBall.transition().duration(350).attr("r", rScale(Math.cbrt(othersMass)));
     }
 
     const beamG = d3.select("#beamG");
@@ -220,7 +220,7 @@ function rebuild(ddA){
     let list = base.slice();
     if (sun && !list.some(d => d.eName === "Sun")) list = [sun, ...list];
 
-    list.sort((a,b) => d3.descending(a.volume, b.volume));
+    list.sort((a,b) => d3.descending(a.mass, b.mass));
 
     if (!list.some(d => d.eName === AName)){
         AName = list.some(d => d.eName === "Jupiter") ? "Jupiter" : list[0].eName;
@@ -234,10 +234,10 @@ d3.csv(DATA_PATH).then(rows => {
     all = rows.map(d => ({
         eName: d.eName,
         isPlanet: isTrue(d.isPlanet),
-        volume: +d.volume
-    })).filter(d => d.eName && isFinite(d.volume) && d.volume > 0);
+        mass: +d.mass_kg
+    })).filter(d => d.eName && isFinite(d.mass) && d.mass > 0);
 
-    all.sort((a,b) => d3.descending(a.volume, b.volume));
+    all.sort((a,b) => d3.descending(a.mass, b.mass));
 
     AName = all.some(d => d.eName === "Jupiter") ? "Jupiter" : all[0].eName;
 
