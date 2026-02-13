@@ -1,0 +1,11 @@
+body {
+    font-family: sans-serif;
+}
+text {
+    pointer-events: none;
+    font-weight: 600;
+}
+.title {
+    text-align: center;
+    margin-top: 20px;
+}
