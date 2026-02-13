@@ -51,3 +51,9 @@
     stroke-width: 1px;
     opacity: 0.6;
 }
+
+.moon-link {
+    stroke: #aaa;
+    stroke-width: 0.7px;
+    opacity: 0.35;
+}

@@ -96,7 +96,7 @@ function drawVis(data, planetsOnly) {
         && planetList.includes(body.orbits_planet))
     console.log("the moons", moonsData)
 
-    let moons = visSvg.selectAll(".moons")
+    let moons = visSvg.selectAll("moons")
         .data(moonsData)
     
     moons.enter().append("circle")
@@ -117,6 +117,20 @@ function drawVis(data, planetsOnly) {
         })
         .attr("r", 2)
 
+    visSvg.selectAll("circle.moon").each(function(m) {
+        const moonNode = this;
+        const moon = d3.select(moonNode);
+
+        const host = visSvg.select("#id" + m.orbits_planet);
+        if (host.empty()) return;
+
+        visSvg.insert("line", () => moonNode)
+            .attr("class", "moon-link")
+            .attr("x1", +host.attr("cx"))
+            .attr("y1", +host.attr("cy"))
+            .attr("x2", +moon.attr("cx"))
+            .attr("y2", +moon.attr("cy"));
+    });
     // add year ranges, for timeline bar at the top 
     let minYear = d3.min(data, (d) => d.discovery_year);
     let maxYear = d3.max(data, (d) => d.discovery_year);
