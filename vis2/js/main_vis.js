@@ -13,6 +13,15 @@ visSvg.append("circle")
     .attr("cy", HEIGHT / 2)
     .attr("cx", 40);
 
+// Box-Muller transform for normal distribution sampling
+function normalRandom(mean = 0, stdDev = 1) {
+    let u = 0, v = 0;
+    while(u === 0) u = Math.random();
+    while(v === 0) v = Math.random();
+    let normal = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+    return mean + stdDev * normal;
+}
+
 function drawVis(data, planetsOnly) {
     console.log("the data", data);
     
@@ -20,18 +29,36 @@ function drawVis(data, planetsOnly) {
     let planetsData = data.filter((body) => body.is_planet)
     console.log("planets only", planetsData)
 
+    // count moons of planets
+    planetsData.forEach(planet => {
+        let moonCount = data.filter(d => d.orbits_planet === planet.name && !d.is_planet).length;
+        planet.moon_count = moonCount;
+    });
+
+    // Create a log scale for x-axis (planet distance from sun)
+    let maxDistance = d3.max(planetsData, p => p.semi_major_axis);
+    let minDistance = d3.min(planetsData, p => p.semi_major_axis);
+    
+    let xScale = d3.scaleLog()
+        .domain([minDistance, maxDistance])
+        .range([120, WIDTH - 100]);
+
     // lets draw the planets !?
     let planets = visSvg.selectAll(".planet")
         .data(planetsData)
+
+    // some manual adjustments to spread out the planets a bit more    
+    let planetShifts = {'Uranus': 35, '136472-Makemake': -20, '136199-Eris': -15}
 
     planets.enter().append("circle")
         .attr("class", p => `planet ${p.name.toLowerCase()}`)
         .attr("id", (p) => "id" + p.name)
         .attr("cy", (p, i) => {     // spread out the planets idk
             let yval = i % 2 == 0 ? -i : i
-            return (p.semi_major_axis) + HEIGHT / 2 + yval * 15
+            let ypos = (p.semi_major_axis) + HEIGHT / 2 + yval * 20 + (planetShifts[p.name] || 0)
+            return ypos
         })
-        .attr("cx", (p, i) => (p.semi_major_axis * 16) + 70)
+        .attr("cx", (p, i) => xScale(p.semi_major_axis))
         .attr("r", 8)
 
     // Sun -> planets
@@ -66,8 +93,9 @@ function drawVis(data, planetsOnly) {
     planetLabels.enter().append("text")
         .text((p) => p.realName)
         .attr("class", "planet-label")
-        .attr("x", (p) => +d3.select("#id" + p.name).attr("cx") + 10)
-        .attr("y", (p) => +d3.select("#id" + p.name).attr("cy") + 10)
+        .attr("text-anchor", "end")
+        .attr("x", (p) => +d3.select("#id" + p.name).attr("cx") - 15)
+        .attr("y", (p) => +d3.select("#id" + p.name).attr("cy") + 5)
     
     // some silly asteroids / comets -- non-planets with primary orbits
     // let asteroidData = data.filter((body) => !body.is_planet && body.orbit_type === "Primary")
@@ -103,17 +131,25 @@ function drawVis(data, planetsOnly) {
         .attr("class", "moon")
         .attr("id", (m) => "id" + m.name)
         .attr("cy", (m, i) => {
-            // get host planet location
-            // console.log(m.name, m.orbits_planet, m.orbit_type, i%15*7)
+            // get host planet location and data
             let hostY = +d3.select("#id" + m.orbits_planet).attr("cy")
-            let offset = 0.5 - Math.random();
-            return hostY + offset * 50
+            let hostPlanet = data.find(d => d.name === m.orbits_planet)
+            
+            // Scale y-spread proportional to planet's distance from sun plus some factor of moon count
+            let distanceScale = (hostPlanet.moon_count) * 0.3 + 10;
+            let yOffset = normalRandom(0, distanceScale)
+
+            return hostY + yOffset
         })
         .attr("cx", (m, i) => {
             // get host planet location
             let hostX = +d3.select("#id" + m.orbits_planet).attr("cx")
-            let offset = 0.5 - Math.random();
-            return hostX + offset * 50
+            let hostPlanet = data.find(d => d.name === m.orbits_planet)
+            
+            // Sample from normal distribution, bounded to the right
+            let xOffset = normalRandom(hostPlanet.moon_count + 20, hostPlanet.moon_count * 0.4);
+            
+            return hostX + xOffset
         })
         .attr("r", 2)
 
@@ -129,6 +165,7 @@ function drawVis(data, planetsOnly) {
             .attr("x1", +host.attr("cx"))
             .attr("y1", +host.attr("cy"))
             .attr("x2", +moon.attr("cx"))
-            .attr("y2", +moon.attr("cy"));
+            .attr("y2", +moon.attr("cy"))
+            .lower();
     });
 }
