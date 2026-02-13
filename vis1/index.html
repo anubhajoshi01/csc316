@@ -27,14 +27,62 @@
 
 <body>
 
-  
- <h1 class="title">Bigger solar system objects were discovered first!</h1>
+<div class="two-vis-container">
+
+    <div class="vis1-container">
+    <h1 class="title">Bigger solar system objects were discovered first!</h1>
     <!-- Completed: d3 included -->
 <button id="resetButton" aria-label="Reset visualization"></button>
 <svg id="viz"></svg>
 
 <script src="js/complete1.js"></script>
+    </div>
 
+    <div class="divider"></div>
+
+    <section class="vis2">
+     <div class="wrap" style="margin-top:40px;">
+         <h1>Do some bodies dominate in mass?</h1>
+
+         <div class="panel">
+             <div class="controls">
+                 <label class="chip">
+                     <input id="planetsOnly" type="checkbox" />
+                     Planets only
+                 </label>
+
+                 <div class="field">
+                     <label>A (selected)</label>
+                     <div id="ddA" class="dropdown"></div>
+                 </div>
+
+                 <div class="field">
+                     <label>B (others)</label>
+                     <div id="bLabel" class="staticBox">All others (excluding Sun)</div>
+                 </div>
+             </div>
+
+             <div class="kpis">
+                 <div class="kpi">
+                     <div class="t">Ratio (A / Others)</div>
+                     <div class="v" id="kpiRatio">—</div>
+                 </div>
+                 <div class="kpi">
+                     <div class="t">A's mass</div>
+                     <div class="v" id="kpiA">—</div>
+                 </div>
+                 <div class="kpi">
+                     <div class="t">Others' mass</div>
+                     <div class="v" id="kpiB">—</div>
+                 </div>
+             </div>
+
+             <svg id="vis" width="100%" height="420"></svg>
+         </div>
+     </div>
+ </section>
+</div>
+ <script src="js/mass.js"></script>
 
 </body>
 </html>

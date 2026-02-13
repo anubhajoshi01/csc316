@@ -103,6 +103,10 @@ function drawPackedSun(data, containerName = "Sun") {
     .on("click", (event, d) => {
       body = d.name;
       draw(body);
+
+      if (window.updateDominanceFromOutside) {
+        window.updateDominanceFromOutside(d.name);
+      }
     });
 
   // --- Force simulation ---
