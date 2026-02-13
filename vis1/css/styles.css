@@ -1,5 +1,5 @@
 #resetButton {
-  position: absolute;
+  position: fixed;
   top: 20px;
   right: 20px;
 
@@ -40,6 +40,7 @@
   --stroke:#2a3550;
   --a:#7dd3fc;
   --b:#c4b5fd;
+  margin-right: 40px;
 
   color: var(--text);
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
@@ -206,4 +207,33 @@
   padding: 8px 10px;
   border-radius: 10px;
   font-size: 13px;
+}
+
+.two-vis-container{
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  padding: 40px;
+}
+
+.vis1-container{
+  position: relative;
+  flex: 0 0 42%;
+  max-width: none;
+  padding-top: 22px;
+}
+
+.vis1-container .title{
+  margin-top: 0;
+}
+
+.two-vis-container > .vis2{
+  flex: 0 0 54%;
+  min-width: 520px;
+}
+
+.divider{
+  width: 1px;
+  align-self: stretch;
+  background: rgba(255,255,255,0.12);
 }
