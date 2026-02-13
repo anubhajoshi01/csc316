@@ -44,11 +44,31 @@ d3.csv("data/sol_data.csv").then(data => {
 
     // Create panel groups
     const panelGroups = svg.selectAll(".panel")
+        .attr("class", "panel")
+        .attr("id", d => `panel-${d.name.toLowerCase()}`)
         .data(panels)
         .enter()
         .append("g")
         .attr("class", "panel")
         .attr("transform", d => `translate(${d.x}, ${d.y})`);
+
+    // Panel titles
+    panelGroups.append("text")
+        .attr("x", panelWidth / 2)  // Center the title horizontally
+        .attr("y", 30)             // Position the title just above the panel
+        .attr("text-anchor", "middle") // Center the text horizontally
+        .attr("font-size", 16)
+        .attr("font-weight", "bold")
+        .text(d => d.name);
+
+    panelGroups.select("#panel-sun")
+        .append("text")
+        .attr("x", panelWidth / 2)
+        .attr("y", 50)
+        .attr("text-anchor", "middle")
+        .attr("font-size", 12)
+        .attr("fill", "gray")
+        .text("Note: Sun's orbiting bodies are shown for comparison");
 
     // Panel borders
     panelGroups.append("rect")
@@ -151,15 +171,14 @@ d3.csv("data/sol_data.csv").then(data => {
         .attr("class", "legend-item")
         .attr("transform", (d, i) => `translate(0, ${i * 30})`);
 
+    legendItems.append("text")
+        .attr("x", 20)
+        .attr("y", 5)
+        .text((d, i) => `${i + 1}. ${d.eName}`)
+        .attr("font-size", 14);
+
     legendItems.append("circle")
         .attr("r", 8)
         .attr("fill", d => colorScale(d.eName))
         .attr("stroke", "black");
-
-    legendItems.append("text")
-        .attr("x", 20)
-        .attr("y", 5)
-        .text(d => d.eName)
-        .attr("font-size", 14);
-
 });
