@@ -7,5 +7,9 @@ text {
 }
 .title {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 40px;
+}
+#description {
+    color: gray;
+    text-align: center;
 }
