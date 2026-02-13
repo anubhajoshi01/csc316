@@ -157,8 +157,8 @@ function drawVis(data, planetsOnly) {
                 .attr("height", 15)
                 .attr("y", 47.5);
             for (let body of data) {
-                if ((body.discovery_year <= minYear + (i+1) * (maxYear - minYear) / NUM_TIMEPERIODS)
-                    && (body.discovery_year > minYear + i * (maxYear - minYear) / NUM_TIMEPERIODS)) {
+                if ((body.discovery_year <= minYear + (i) * (maxYear - minYear) / NUM_TIMEPERIODS)
+                    && (body.discovery_year > minYear + (i-1) * (maxYear - minYear) / NUM_TIMEPERIODS)) {
                     d3.select("#id" + body.name).style("fill", "red");
                     console.log("body", body.name, body.discovery_year)
                 }
@@ -169,7 +169,7 @@ function drawVis(data, planetsOnly) {
                 .attr("height", 10)
                 .attr("y", 50);
             for (let body of data) {
-                if (body.discovery_year <= minYear + (i+1) * (maxYear - minYear) / NUM_TIMEPERIODS) {
+                if (body.discovery_year <= minYear + (i) * (maxYear - minYear) / NUM_TIMEPERIODS) {
                     d3.select("#id" + body.name).style("fill", null);
                 }
             }
