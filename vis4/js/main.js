@@ -1,5 +1,5 @@
 // Create svg canvas
-const width = 1000;  
+const width = 1100;  
 const height = 800;
 
 const svg = d3.select("#vis4")
@@ -90,9 +90,9 @@ d3.csv("data/sol_data.csv").then(data => {
         // Central body color
         const centralColors = {
             Sun: "yellow",
-            Saturn: "#dbcd4e",
-            Neptune: "#4e79a7",
-            Uranus: "#59a14f"
+            Saturn: "#f5e134",
+            Neptune: "#1f466f",
+            Uranus: "#79c8ed"
         };
 
         // Draw central body
@@ -101,7 +101,7 @@ d3.csv("data/sol_data.csv").then(data => {
             .attr("cy", centerY)
             .attr("r", radiusScale(centralBody.meanRadius))
             .attr("fill", centralColors[panel.name])
-            .attr("stroke", "black");
+            .attr("stroke", panel.name === "Sun" ? "orange" : "black");
 
         // Orbiting objects
         const orbiters = mostEccentric.filter(obj => {
@@ -138,7 +138,7 @@ d3.csv("data/sol_data.csv").then(data => {
             const centralRadius = radiusScale(centralBody.meanRadius);
 
             // Control how large orbiting objects appear relative to parent
-            const proportionalFactor = 0.25;  // adjust between 0.15–0.35
+            const proportionalFactor = 0.25;
 
             const orbitingRadius = centralRadius * proportionalFactor;
 
@@ -174,7 +174,7 @@ d3.csv("data/sol_data.csv").then(data => {
     legendItems.append("text")
         .attr("x", 20)
         .attr("y", 5)
-        .text((d, i) => `${i + 1}. ${d.eName}`)
+        .text((d, i) => d.discoveryDate != "NA" ? `${i + 1}. ${d.eName} (${d.discoveryDate})` : `${i + 1}. ${d.eName}`)
         .attr("font-size", 14);
 
     legendItems.append("circle")
