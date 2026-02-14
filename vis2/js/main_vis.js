@@ -49,7 +49,7 @@ function drawVis(data, planetsOnly) {
         .data(planetsData)
 
     // some manual adjustments to spread out the planets a bit more    
-    let planetShifts = {'Mercury': -40, 'Venus': 80, 'Earth': -120, 'Uranus': 35, '136472-Makemake': -20, '136199-Eris': -15}
+    let planetShifts = {'Mercury': -40, 'Venus': 150, 'Earth': -120, 'Mars': 75, 'Uranus': 35, '136472-Makemake': -20, '136199-Eris': -15}
 
     planets.enter().append("circle")
         .attr("class", p => `planet ${p.name.toLowerCase()}`)
@@ -59,7 +59,7 @@ function drawVis(data, planetsOnly) {
             let ypos = (p.semi_major_axis) + HEIGHT / 2 + yval * 20 * Math.min(p.semi_major_axis, 1) + (planetShifts[p.name] || 0)
             return ypos
         })
-        .attr("cx", (p, i) => xScale(p.semi_major_axis) - 30)
+        .attr("cx", (p, i) => xScale(p.semi_major_axis) - 35)
         .attr("r", 8)
 
     // Sun -> planets
@@ -91,11 +91,13 @@ function drawVis(data, planetsOnly) {
     let planetLabels = visSvg.selectAll(".planet-label")
         .data(planetsData)
 
+    let moonlessPlanets = planetsData.filter(p => p.moon_count === 0).map(p => p.name);
+
     planetLabels.enter().append("text")
         .text((p) => p.realName)
         .attr("class", "planet-label")
-        .attr("text-anchor", "end")
-        .attr("x", (p) => +d3.select("#id" + p.name).attr("cx") - 15)
+        .attr("text-anchor", (p) => moonlessPlanets.includes(p.name) ? "start" : "end")
+        .attr("x", (p) => +d3.select("#id" + p.name).attr("cx") + (moonlessPlanets.includes(p.name) ? 12 : -15))
         .attr("y", (p) => +d3.select("#id" + p.name).attr("cy") + 5)
     
     // some silly asteroids / comets -- non-planets with primary orbits
