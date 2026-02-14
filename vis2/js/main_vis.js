@@ -96,12 +96,12 @@ function drawVis(data, planetsOnly) {
         && planetList.includes(body.orbits_planet))
     console.log("the moons", moonsData)
 
-    let moons = visSvg.selectAll(".moons")
+    let moons = visSvg.selectAll("moons")
         .data(moonsData)
     
     moons.enter().append("circle")
         .attr("class", "moon")
-        .attr("id", (m) => m.name)
+        .attr("id", (m) => "id" + m.name)
         .attr("cy", (m, i) => {
             // get host planet location
             // console.log(m.name, m.orbits_planet, m.orbit_type, i%15*7)
@@ -117,4 +117,18 @@ function drawVis(data, planetsOnly) {
         })
         .attr("r", 2)
 
+    visSvg.selectAll("circle.moon").each(function(m) {
+        const moonNode = this;
+        const moon = d3.select(moonNode);
+
+        const host = visSvg.select("#id" + m.orbits_planet);
+        if (host.empty()) return;
+
+        visSvg.insert("line", () => moonNode)
+            .attr("class", "moon-link")
+            .attr("x1", +host.attr("cx"))
+            .attr("y1", +host.attr("cy"))
+            .attr("x2", +moon.attr("cx"))
+            .attr("y2", +moon.attr("cy"));
+    });
 }

@@ -67,4 +67,8 @@
       background: white;          /* white background on hover */
       color: black;               /* black text on hover */
       border: 2px solid white;
+.moon-link {
+    stroke: #aaa;
+    stroke-width: 0.7px;
+    opacity: 0.35;
 }
