@@ -22,6 +22,23 @@
       text-align: center;
       margin-top: 20px;
     }
+
+    .navBtn {
+      background: black;          /* black inside */
+      color: white;               /* text color white */
+      border: 2px solid white;    /* white outline */
+      padding: 14px 40px;
+      font-size: 18px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .navBtn:hover {
+      background: white;          /* white background on hover */
+      color: black;               /* black text on hover */
+      border: 2px solid white;    /* keep the outline white */
+    }
   </style>
 </head>
 
@@ -31,6 +48,7 @@
 
     <div class="vis1-container">
     <h1 class="title">Bigger solar system objects were discovered first!</h1>
+    <h3 class="title">We first discovered things we could see with the naked eye - planets large in mass and volume</h3>
     <!-- Completed: d3 included -->
 <button id="resetButton" aria-label="Reset visualization"></button>
 <svg id="viz"></svg>
@@ -83,6 +101,19 @@
  </section>
 </div>
  <script src="js/mass.js"></script>
+
+ <div style="text-align:center; color: white; font-size: large;">
+    First we just noticed big stars and planets, then we started asking questions.
+</div>
+<div style="text-align:center; color: white; font-size: large;">
+    Discovering gravity and the rules of the solar system let us see not just what is, but what will be...
+</div>
+
+ <div style="text-align:center; margin:20px 0;">
+  <button onclick="window.location.href='../vis3/index.html'" class="navBtn">
+    Check out how gravity acts on different planets!
+  </button>
+</div>
 
 </body>
 </html>
