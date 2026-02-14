@@ -39,7 +39,8 @@ function drawVis(data, planetsOnly) {
     let maxDistance = d3.max(planetsData, p => p.semi_major_axis);
     let minDistance = d3.min(planetsData, p => p.semi_major_axis);
     
-    let xScale = d3.scaleLog()
+    let xScale = d3.scalePow()
+        .exponent(0.7)
         .domain([minDistance, maxDistance])
         .range([120, WIDTH - 100]);
 
@@ -48,17 +49,17 @@ function drawVis(data, planetsOnly) {
         .data(planetsData)
 
     // some manual adjustments to spread out the planets a bit more    
-    let planetShifts = {'Uranus': 35, '136472-Makemake': -20, '136199-Eris': -15}
+    let planetShifts = {'Mercury': -40, 'Venus': 80, 'Earth': -120, 'Uranus': 35, '136472-Makemake': -20, '136199-Eris': -15}
 
     planets.enter().append("circle")
         .attr("class", p => `planet ${p.name.toLowerCase()}`)
         .attr("id", (p) => "id" + p.name)
         .attr("cy", (p, i) => {     // spread out the planets idk
             let yval = i % 2 == 0 ? -i : i
-            let ypos = (p.semi_major_axis) + HEIGHT / 2 + yval * 20 + (planetShifts[p.name] || 0)
+            let ypos = (p.semi_major_axis) + HEIGHT / 2 + yval * 20 * Math.min(p.semi_major_axis, 1) + (planetShifts[p.name] || 0)
             return ypos
         })
-        .attr("cx", (p, i) => xScale(p.semi_major_axis))
+        .attr("cx", (p, i) => xScale(p.semi_major_axis) - 30)
         .attr("r", 8)
 
     // Sun -> planets
@@ -147,7 +148,7 @@ function drawVis(data, planetsOnly) {
             let hostPlanet = data.find(d => d.name === m.orbits_planet)
             
             // Sample from normal distribution, bounded to the right
-            let xOffset = normalRandom(hostPlanet.moon_count + 20, hostPlanet.moon_count * 0.4);
+            let xOffset = normalRandom(hostPlanet.moon_count + 30, hostPlanet.moon_count * 0.4 + 10);
             
             return hostX + xOffset
         })
