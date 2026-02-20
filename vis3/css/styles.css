@@ -1,16 +1,56 @@
-.navBtn {
-      background: black;          /* black inside */
-      color: white;               /* text color white */
-      border: 2px solid white;    /* white outline */
-      padding: 14px 40px;
-      font-size: 18px;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
+/* ========================= */
+/* Global Dark Mode */
+/* ========================= */
 
-    .navBtn:hover {
-      background: white;          /* white background on hover */
-      color: black;               /* black text on hover */
-      border: 2px solid white;
-    }
+body {
+    background-color: #0b0f17;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+}
+
+/* Force all normal text white */
+* {
+    color: white;
+}
+
+/* D3 SVG background */
+svg {
+    background-color: #0b0f17;
+}
+
+/* SVG text must use fill */
+svg text {
+    fill: white;
+}
+
+/* Axis styling */
+.axis path,
+.axis line {
+    stroke: white;
+}
+
+.axis text {
+    fill: white;
+}
+
+/* ========================= */
+/* Button */
+/* ========================= */
+
+.navBtn {
+    background: black;
+    color: white;
+    border: 2px solid white;
+    padding: 14px 40px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.navBtn:hover {
+    background: white;
+    color: black;
+}

@@ -1,0 +1,378 @@
+/* ================================================= */
+/* ================= GLOBAL THEME ================== */
+/* ================================================= */
+
+:root {
+  --bg-main: #0b0f17;
+  --panel: #101827;
+  --text-main: #ffffff;
+  --muted: #9fb0d0;
+  --stroke: #2a3550;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  text-align: center;
+}
+
+h1, h2, h3 {
+  margin-top: 20px;
+}
+
+.center-text {
+  text-align: center;
+  color: white;
+  font-size: large;
+  margin: 10px 0;
+}
+
+.center-button {
+  text-align: center;
+  margin: 20px 0;
+}
+
+/* ================================================= */
+/* ================= SVG / AXES ==================== */
+/* ================================================= */
+
+svg {
+  background-color: var(--bg-main);
+}
+
+svg text {
+  fill: white;
+  pointer-events: none;
+  font-weight: 600;
+}
+
+.axis path,
+.axis line {
+  stroke: white;
+}
+
+.axis text {
+  fill: white;
+}
+
+/* ================================================= */
+/* ================= NAV BUTTON ==================== */
+/* ================================================= */
+
+.navBtn {
+  background: black;
+  color: white;
+  border: 2px solid white;
+  padding: 14px 40px;
+  font-size: 18px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.navBtn:hover {
+  background: white;
+  color: black;
+}
+
+/* ================================================= */
+/* ================= RESET BUTTON ================== */
+/* ================================================= */
+
+#resetButton {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 42px;
+  height: 42px;
+  background: black;
+  color: white;
+  border: 1px solid white;
+  border-radius: 50%;
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+#resetButton:hover {
+  background: white;
+  color: black;
+  transform: rotate(-90deg);
+}
+
+#resetButton:active {
+  transform: rotate(-180deg) scale(0.95);
+}
+
+/* ================================================= */
+/* ================= VIS 1 + VIS 2 LAYOUT ========== */
+/* ================================================= */
+
+.two-vis-container {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  padding: 40px;
+  text-align: left;
+}
+
+.vis1-container {
+  position: relative;
+  flex: 0 0 42%;
+  padding-top: 22px;
+}
+
+.vis2 {
+  flex: 0 0 54%;
+  min-width: 520px;
+  text-align: left;
+}
+
+.divider {
+  width: 1px;
+  align-self: stretch;
+  background: rgba(255,255,255,0.12);
+}
+
+/* ================================================= */
+/* ================= VIS 2 PANEL =================== */
+/* ================================================= */
+.vis2 {
+  --a: #7dd3fc;   /* color for selected A body */
+  --b: #c4b5fd;   /* color for Others */
+  --text: #e8eefc;
+  --muted: #9fb0d0;
+  --stroke: #2a3550;
+}
+
+.vis2 .wrap {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 22px 16px 36px;
+}
+
+.vis2 h1 {
+  margin: 0 0 6px 0;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.vis2 .panel {
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.28);
+}
+
+.vis2 .controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: end;
+  margin-bottom: 12px;
+}
+
+.vis2 .field label {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.vis2 .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #0c1322;
+  border: 1px solid var(--stroke);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.vis2 .kpis {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.vis2 .kpi {
+  flex: 1;
+  min-width: 180px;
+  background: #0c1322;
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.vis2 .kpi .t {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.vis2 .kpi .v {
+  margin-top: 6px;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.vis2 .dropdown {
+  width: 220px;
+  position: relative;
+}
+
+.vis2 .dd-btn {
+  width: 100%;
+  background: #0c1322;
+  border: 1px solid var(--stroke);
+  color: var(--text-main);
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.vis2 .dd-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 260px;
+  overflow: auto;
+  background: #0c1322;
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+  display: none;
+  z-index: 9999;
+}
+
+.vis2 .dd-menu.open {
+  display: block;
+}
+
+.vis2 .dd-item {
+  padding: 9px 10px;
+  cursor: pointer;
+  font-size: 13px;
+  border-bottom: 1px solid var(--stroke);
+}
+
+.vis2 .dd-item:hover {
+  background: #1a2a4a;
+}
+
+.vis2 .staticBox {
+  width: 220px;
+  background: #0c1322;
+  border: 1px solid var(--stroke);
+  color: var(--muted);
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+/* ================================================= */
+/* ================= ORBIT VIS ===================== */
+/* ================================================= */
+/* ========================= */
+/* Planets (only in #chart-area) */
+/* ========================= */
+
+#chart-area .planet {
+    stroke: grey;
+    stroke-width: 1px;
+    opacity: 0.95;
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(var(--scale, 1));
+}
+
+/* Planet subclasses */
+#chart-area .planet.mercury { fill: #b7b7b7; --scale: 0.55; }
+#chart-area .planet.venus   { fill: #d7b36a; --scale: 0.90; }
+#chart-area .planet.earth   { fill: #4a90e2; --scale: 0.95; }
+#chart-area .planet.mars    { fill: #c65a3a; --scale: 0.70; }
+
+#chart-area .planet.jupiter { fill: #caa07a; --scale: 2.20; }
+#chart-area .planet.saturn  { fill: #e6d28a; --scale: 1.90; }
+#chart-area .planet.uranus  { fill: #76c7c0; --scale: 1.25; }
+#chart-area .planet.neptune { fill: #3b5bd6; --scale: 1.20; }
+
+#chart-area .planet.other   { fill: #777; --scale: 0.45; }
+
+/* ========================= */
+/* Sun (only in #chart-area) */
+/* ========================= */
+
+#chart-area .sun {
+    fill: #FDB813;
+    stroke: #E08B00;
+    stroke-width: 2px;
+    filter: drop-shadow(0 0 12px rgba(253, 184, 19, 0.7));
+}
+
+/* ========================= */
+/* Moons (only in #chart-area) */
+/* ========================= */
+
+#chart-area .moon {
+    fill: #cccccc;
+    opacity: 0.6;
+    stroke: rgba(255, 255, 255, 0.2);
+    stroke-width: 0.5px;
+}
+
+/* ========================= */
+/* Saturn ring (only in #chart-area) */
+/* ========================= */
+
+#chart-area .saturn-ring {
+    fill: none;
+    stroke: #c8be96;
+    stroke-width: 3px;
+}
+
+/* ========================= */
+/* Links (only in #chart-area) */
+/* ========================= */
+
+#chart-area .planet-link {
+    stroke: #888;
+    stroke-width: 1px;
+    opacity: 0.6;
+}
+
+#chart-area .moon-link {
+    stroke: #aaa;
+    stroke-width: 0.7px;
+    opacity: 0.35;
+}
+
+/* ================================================= */
+/* ================= VIS3 + VIS4 =================== */
+/* ================================================= */
+
+#vis3, #vis4 {
+  width: 100%;
+  height: 500px;
+  margin: 0 auto;
+  background-color: #0b0f17; /* dark background */
+}
+
+/* Force SVG text white inside Vis3 and Vis4 */
+#vis3 text,
+#vis4 text {
+  fill: white;
+  font-weight: 600;  /* optional for consistency with Vis1 */
+  pointer-events: none;
+}
