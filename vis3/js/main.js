@@ -31,7 +31,7 @@ dude.append("circle")
     .attr("cy", -70)
     .attr("r", 16)
     .attr("fill", "none")
-    .attr("stroke", "black")
+    .attr("stroke", "white")
     .attr("stroke-width", 3);
 
 // body
@@ -40,14 +40,14 @@ dude.append("line")
     .attr("y1", -54)
     .attr("x2", 0)
     .attr("y2", -10)
-    .attr("stroke", "black")
+    .attr("stroke", "white")
     .attr("stroke-width", 3)
     .attr("stroke-linecap", "round");
 
 // legs
 dude.append("line")
     .attr("x1", 0).attr("y1", -10).attr("x2", -12).attr("y2", 10)
-    .attr("stroke", "black").attr("stroke-width", 3)
+    .attr("stroke", "white").attr("stroke-width", 3)
     .attr("stroke-linecap", "round");
 
 dude.append("line")
@@ -55,7 +55,7 @@ dude.append("line")
     .attr("y1", -10)
     .attr("x2",  12)
     .attr("y2", 10)
-    .attr("stroke", "black")
+    .attr("stroke", "white")
     .attr("stroke-width", 3)
     .attr("stroke-linecap", "round");
 
@@ -65,7 +65,7 @@ dude.append("line")
 dude.append("line")
     .attr("x1", 0).attr("y1", -42)
     .attr("x2", -22).attr("y2", -52)
-    .attr("stroke", "black")
+    .attr("stroke", "white")
     .attr("stroke-width", 3)
     .attr("stroke-linecap", "round");
 
@@ -73,7 +73,7 @@ dude.append("line")
 dude.append("line")
     .attr("x1", 0).attr("y1", -42 + 2)
     .attr("x2", -22).attr("y2", -44)
-    .attr("stroke", "black")
+    .attr("stroke", "white")
     .attr("stroke-width", 3)
     .attr("stroke-linecap", "round");
 
@@ -155,7 +155,7 @@ planets.forEach(function(p, i) {
     svg.append("path")
         .attr("d", dPath)
         .attr("fill", "none")
-        .attr("stroke", (p.name === "Earth") ? "black" : arcColors[i % arcColors.length])
+        .attr("stroke", (p.name === "Earth") ? "white" : arcColors[i % arcColors.length])
         .attr("stroke-width", 3)
         .attr("stroke-dasharray", (p.name === "Earth") ? null : "10 10")
         .attr("stroke-linecap", "round");

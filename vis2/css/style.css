@@ -1,15 +1,44 @@
+/* ========================= */
+/* Global Dark Mode */
+/* ========================= */
+
+body {
+    background-color: #0b0f17;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+}
+
+#chart-area {
+    background-color: #0b0f17;
+}
+
+/* Force ALL text white */
+* {
+    color: white;
+}
+
+/* SVG text must use fill */
+svg text {
+    fill: white;
+}
+
+/* ========================= */
 /* Sun */
+/* ========================= */
+
 .sun {
     fill: #FDB813;
     stroke: #E08B00;
     stroke-width: 2px;
-    opacity: 1;
-    filter: drop-shadow(0 0 10px rgba(253, 184, 19, 0.6));
+    filter: drop-shadow(0 0 12px rgba(253, 184, 19, 0.7));
 }
 
+/* ========================= */
 /* Planets */
+/* ========================= */
+
 .planet {
-    stroke: rgba(0, 0, 0, 0.35);
+    stroke: grey; /* lighter stroke for dark bg */
     stroke-width: 1px;
     opacity: 0.95;
 
@@ -29,22 +58,33 @@
 .planet.saturn  { fill: #e6d28a; --scale: 1.90; }
 .planet.uranus  { fill: #76c7c0; --scale: 1.25; }
 .planet.neptune { fill: #3b5bd6; --scale: 1.20; }
-.plant.other { fill: black; --scale: 0.45; }
 
+.planet.other { fill: #777; --scale: 0.45; }
+
+/* ========================= */
 /* Moons */
+/* ========================= */
+
 .moon {
-    fill: grey;
-    opacity: 0.5;
-    stroke: rgba(0, 0, 0, 0.2);
+    fill: #cccccc;
+    opacity: 0.6;
+    stroke: rgba(255, 255, 255, 0.2);
     stroke-width: 0.5px;
 }
 
+/* ========================= */
 /* Saturn ring */
+/* ========================= */
+
 .saturn-ring {
     fill: none;
     stroke: #c8be96;
     stroke-width: 3px;
 }
+
+/* ========================= */
+/* Links */
+/* ========================= */
 
 .planet-link {
     stroke: #888;
@@ -52,23 +92,28 @@
     opacity: 0.6;
 }
 
-.navBtn {
-      background: black;          /* black inside */
-      color: white;               /* text color white */
-      border: 2px solid white;    /* white outline */
-      padding: 14px 40px;
-      font-size: 18px;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: 0.3s ease;
-}
-
-.navBtn:hover {
-      background: white;          /* white background on hover */
-      color: black;               /* black text on hover */
-      border: 2px solid white;
 .moon-link {
     stroke: #aaa;
     stroke-width: 0.7px;
     opacity: 0.35;
+}
+
+/* ========================= */
+/* Navigation Button */
+/* ========================= */
+
+.navBtn {
+    background: black;
+    color: white;
+    border: 2px solid white;
+    padding: 14px 40px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.navBtn:hover {
+    background: white;
+    color: black;
 }
