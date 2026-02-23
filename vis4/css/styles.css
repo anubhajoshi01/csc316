@@ -1,28 +1,75 @@
+/* ========================= */
+/* Global Dark Mode */
+/* ========================= */
+
 body {
+    background-color: #0b0f17;
+    color: white;
     font-family: sans-serif;
-}
-text {
-    pointer-events: none;
-    font-weight: 600;
-}
-.title {
+    margin: 0;
     text-align: center;
+}
+
+/* Force all standard HTML text white */
+* {
+    color: white;
+}
+
+/* Titles */
+.title {
     margin-top: 20px;
 }
 
+/* Description paragraph */
+#description {
+    max-width: 800px;
+    margin: 0 auto 20px auto;
+    line-height: 1.5;
+}
+
+/* ========================= */
+/* D3 / SVG Styling */
+/* ========================= */
+
+/* Dark SVG background */
+svg {
+    background-color: #0b0f17;
+}
+
+/* SVG text must use fill */
+svg text {
+    fill: white;
+    pointer-events: none;
+    font-weight: 600;
+}
+
+/* Axis lines */
+.axis path,
+.axis line {
+    stroke: white;
+}
+
+/* Axis labels */
+.axis text {
+    fill: white;
+}
+
+/* ========================= */
+/* Navigation Button */
+/* ========================= */
+
 .navBtn {
-      background: black;          /* black inside */
-      color: white;               /* text color white */
-      border: 2px solid white;    /* white outline */
-      padding: 14px 40px;
-      font-size: 18px;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: 0.3s ease;
+    background: black;
+    color: white;
+    border: 2px solid white;
+    padding: 14px 40px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s ease;
 }
 
 .navBtn:hover {
-      background: white;          /* white background on hover */
-      color: black;               /* black text on hover */
-      border: 2px solid white;
+    background: white;
+    color: black;
 }
