@@ -1,17 +1,17 @@
 // main.js
 let svg = d3.select("#vis3").append("svg")
-    .attr('width', 1100)
-    .attr('height', 520)
+    .attr("width", 1100)
+    .attr("height", 520);
 
 // Layout constants
 const groundY = 380;
-const throwX  = 120;
-const throwY  = 190;
+const throwX = 120;
+const throwY = 190;
 
 // --- ground line ---
 const W = +svg.attr("width");
 
-const ground = d3.range(0, W + 1, 10).map(function(x) {
+const ground = d3.range(0, W + 1, 10).map(function (x) {
     return { x: x, y: groundY + Math.sin(x / 14) * 3 };
 });
 
@@ -53,13 +53,11 @@ dude.append("line")
 dude.append("line")
     .attr("x1", 0)
     .attr("y1", -10)
-    .attr("x2",  12)
+    .attr("x2", 12)
     .attr("y2", 10)
     .attr("stroke", "white")
     .attr("stroke-width", 3)
     .attr("stroke-linecap", "round");
-
-// --- Arms BOTH behind the body (like your sketch) ---
 
 // arm 1 (longer)
 dude.append("line")
@@ -81,82 +79,169 @@ dude.append("line")
 dude.append("line")
     .attr("x1", -25).attr("y1", -40)
     .attr("x2", -35).attr("y2", -100)
-    .attr("stroke", "#8b5a2b") // brown like in last lab
+    .attr("stroke", "#8b5a2b")
     .attr("stroke-width", 9)
     .attr("stroke-linecap", "round");
 
+// Data extracted from the dataset manually
 
-// Planet data (Since there is only a few, i extract it manually from the dataset.
-// Only the rank of the gravity strength is extracted, not real numbers)
-const planets = [
-    { name: "Jupiter", strength: 7 },
-    { name: "Neptune", strength: 6 },
-    { name: "Saturn",  strength: 5 },
-    { name: "Earth",   strength: 4 },
-    { name: "Venus",   strength: 3 },
-    { name: "Uranus",  strength: 2 },
-    { name: "Mars",    strength: 1 },
-    { name: "Mercury", strength: 0 }
+const planetGravity = [
+    { name: "Mercury", g: 3.70 },
+    { name: "Venus",   g: 8.87 },
+    { name: "Earth",   g: 9.81 },
+    { name: "Mars",    g: 3.71 },
+    { name: "Jupiter", g: 24.79 },
+    { name: "Saturn",  g: 10.44 },
+    { name: "Uranus",  g: 8.69 },
+    { name: "Neptune", g: 11.15 }
 ];
 
-// Axis scales
-const xAxis = d3.scalePoint()
-    .domain(planets.map(function(p) { return p.name; }))
-    .range([throwX + 220, W - 90])
-    .padding(0.3);
+// Some setups
+const orderedPlanets = planetGravity.slice().sort((a, b) => b.g - a.g);
 
-const yAxis = d3.scaleLinear()
-    .domain([0, 7])       // 0 = weakest (tallest), 7 = strongest (flattest)
-    .range([230, 90]);    // taller → flatter
-
-// Colors to distinguish planets
 const arcColors = d3.schemeCategory10;
-const planetColor = d3.scaleOrdinal(d3.schemeCategory10);
 
-// Foreach planet:
-planets.forEach(function(p, i) {
-    const x = xAxis(p.name);
+// xAxis domain affected by the gravity
+const [minG, maxG] = d3.extent(planetGravity, d => d.g);
+
+const xAxis = d3.scaleLinear()
+    .domain([minG, maxG])
+    .range([W - 90, throwX + 220]);
+
+const ARC_HEIGHT = 150;
+
+// Label staggering to avoid crowded labels
+const BASE_LABEL_Y = groundY + 35;
+const LABEL_STEP_Y = 14;
+const LABEL_LEVELS = 5;
+
+function labelYForPlanet(name) {
+    const idx = orderedPlanets.findIndex(d => d.name === name);
+    const level = (idx < 0 ? 0 : (idx % LABEL_LEVELS));
+    return BASE_LABEL_Y + level * LABEL_STEP_Y;
+}
+
+function cssPlanetClass(name) {
+    return String(name).toLowerCase(); // "Mercury" -> "mercury"
+}
+
+// Layers so new throws draw cleanly
+const arcLayer    = svg.append("g").attr("class", "arcLayer");
+const planetLayer = svg.append("g").attr("class", "planetLayer");
+const labelLayer  = svg.append("g").attr("class", "labelLayer");
+
+const placed = new Set();
+
+// -----------------------------------------
+// UI controls (AI coded)
+// -----------------------------------------
+const controls = d3.select("body")
+    .append("div")
+    .attr("class", "ctrlBar")
+    .style("text-align", "center");
+
+controls.append("span")
+    .text("Choose a planet: ")
+    .style("margin-right", "10px");
+
+const select = controls.append("select")
+    .attr("id", "planetSelect")
+    .attr("class", "planetSelect");
+
+select.selectAll("option")
+    .data(orderedPlanets)
+    .enter()
+    .append("option")
+    .attr("value", d => d.name)
+    .text(d => d.name);
+
+controls.append("button")
+    .attr("class", "navBtn")
+    .style("margin-left", "12px")
+    .text("Throw")
+    .on("click", () => {
+        const name = select.property("value");
+        throwPlanet(name);
+    });
+
+// -----------------------------------------
+// Throw animation (AI coded)
+// -----------------------------------------
+function throwPlanet(name) {
+    if (placed.has(name)) return;
+
+    const p = planetGravity.find(d => d.name === name);
+    if (!p) return;
+
+    // landing x is driven by gravity
+    const x = xAxis(p.g);
+
+    // Keep base radii; CSS will scale visually via transform: scale(--scale)
     const planetR = (p.name === "Jupiter") ? 22 : 16;
     const planetY = groundY - planetR;
 
-    // planets
-    svg.append("circle")
-        .attr("cx", x)
-        .attr("cy", planetY)
-        .attr("r", planetR)
-        .attr("fill", planetColor(p.name))
-        .attr("stroke", "#222")
-        .attr("stroke-width", 2);
+    // Constant arc height
+    const cx = (throwX + x) / 2;
+    const cy = throwY - ARC_HEIGHT;
 
-    // Additional Saturn ring
-    if (p.name === "Saturn") {
-        svg.append("ellipse")
-            .attr("cx", x)
-            .attr("cy", planetY)
-            .attr("rx", planetR + 12)
-            .attr("ry", 6)
-            .attr("fill", "none")
-            .attr("stroke", "grey")
-            .attr("stroke-width", 3);
-    }
+    const dPath = `M ${throwX},${throwY} Q ${cx},${cy} ${x},${planetY - 10}`;
 
-    // labels
-    svg.append("text")
-        .attr("class", "planet-label")
-        .attr("x", x)
-        .attr("y", groundY + 35)
-        .text(p.name);
-
-    // arc (not properly scaled)
-    const dPath = "M " + throwX + "," + throwY +
-        " Q " + ((throwX + x) / 2) + "," + (throwY - yAxis(p.strength)) +
-        " " + x + "," + (planetY - 10);
-
-    svg.append("path")
+    // Draw the arc now (so the moving planet can follow it)
+    const arc = arcLayer.append("path")
         .attr("d", dPath)
         .attr("fill", "none")
-        .attr("stroke", (p.name === "Earth") ? "white" : arcColors[i % arcColors.length])
+        .attr("stroke", (p.name === "Earth")
+            ? "white"
+            : arcColors[orderedPlanets.findIndex(q => q.name === p.name) % arcColors.length]
+        )
         .attr("stroke-width", 3)
         .attr("stroke-dasharray", (p.name === "Earth") ? null : "10 10")
         .attr("stroke-linecap", "round");
-});
+
+    const arcNode = arc.node();
+    const L = arcNode.getTotalLength();
+
+    const cls = String(p.name).toLowerCase(); // "Jupiter" -> "jupiter"
+
+    const ball = planetLayer.append("circle")
+        .attr("class", `planet ${cls}`)  // matches .planet.jupiter, .planet.earth, etc
+        .attr("r", planetR)
+        .attr("cx", throwX)
+        .attr("cy", throwY);
+
+    // Animate along the arc using getPointAtLength
+    ball.transition()
+        .duration(1400)
+        .ease(d3.easeCubicInOut)
+        .attrTween("cx", () => t => arcNode.getPointAtLength(t * L).x)
+        .attrTween("cy", () => t => arcNode.getPointAtLength(t * L).y)
+        .on("end", () => {
+            // Snap to final ground position
+            ball.attr("cx", x).attr("cy", planetY);
+
+            // Saturn ring
+            if (p.name === "Saturn") {
+                planetLayer.insert("ellipse", "circle")
+                    .attr("class", "saturn-ring")
+                    .attr("cx", x)
+                    .attr("cy", planetY)
+                    .attr("rx", planetR + 25)
+                    .attr("ry", 6);
+            }
+
+            // Label under the planet (staggered vertically)
+            labelLayer.append("text")
+                .attr("class", "planet-label")
+                .attr("x", x)
+                .attr("y", labelYForPlanet(p.name))
+                .attr("text-anchor", "middle")
+                .text(p.name);
+
+            placed.add(name);
+
+            // Disable selected planet in dropdown
+            select.selectAll("option")
+                .filter(d => d.name === name)
+                .attr("disabled", true);
+        });
+}
