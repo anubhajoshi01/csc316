@@ -99,6 +99,39 @@ function drawVis(data, planetsOnly) {
         .attr("text-anchor", (p) => moonlessPlanets.includes(p.name) ? "start" : "end")
         .attr("x", (p) => +d3.select("#id" + p.name).attr("cx") + (moonlessPlanets.includes(p.name) ? 12 : -15))
         .attr("y", (p) => +d3.select("#id" + p.name).attr("cy") + 5)
+
+    // build moon-free safe zones around every planet and its label
+    const PLANET_SAFE_RADIUS = 30;
+    const LABEL_PADDING = 4;
+
+    // for planets
+    const circleZones = planetsData.map(p => ({
+        cx: +d3.select("#id" + p.name).attr("cx"),
+        cy: +d3.select("#id" + p.name).attr("cy"),
+        r: PLANET_SAFE_RADIUS
+    }));
+
+    // for their labels
+    const rectZones = [];
+    visSvg.selectAll(".planet-label").each(function() {
+        const bbox = this.getBBox();
+        rectZones.push({
+            x: bbox.x - LABEL_PADDING,
+            y: bbox.y - LABEL_PADDING,
+            w: bbox.width  + LABEL_PADDING * 2,
+            h: bbox.height + LABEL_PADDING * 2
+        });
+    });
+
+    function isInAnySafeZone(x, y) {
+        // check if coords land inside either circular or rectangular safe zone
+        if (circleZones.some(z => {
+            const dx = x - z.cx, dy = y - z.cy;
+            return dx * dx + dy * dy < z.r * z.r;
+        })) return true;
+        if (rectZones.some(z => x >= z.x && x <= z.x + z.w && y >= z.y && y <= z.y + z.h)) return true;
+        return false;
+    }
     
     // some silly asteroids / comets -- non-planets with primary orbits
     // let asteroidData = data.filter((body) => !body.is_planet && body.orbit_type === "Primary")
@@ -129,31 +162,31 @@ function drawVis(data, planetsOnly) {
 
     let moons = visSvg.selectAll("moons")
         .data(moonsData)
-    
+
+    // Precompute moon positions with rejection sampling to avoid safe zones
+    const MAX_PLACEMENT_TRIES = 100;
+    moonsData.forEach(m => {
+        const hostX = +d3.select("#id" + m.orbits_planet).attr("cx");
+        const hostY = +d3.select("#id" + m.orbits_planet).attr("cy");
+        const hostPlanet = data.find(d => d.name === m.orbits_planet);
+        const distanceScale = hostPlanet.moon_count * 0.3 + 10;
+        let x, y, tries = 0;
+        do {
+            const yOffset = normalRandom(0, distanceScale);
+            const xOffset = normalRandom(hostPlanet.moon_count + 30, hostPlanet.moon_count * 0.4 + 10);
+            x = hostX + xOffset;
+            y = hostY + yOffset;
+            tries++;
+        } while (isInAnySafeZone(x, y) && tries < MAX_PLACEMENT_TRIES);
+        m._moonX = x;
+        m._moonY = y;
+    });
+
     moons.enter().append("circle")
         .attr("class", "moon")
         .attr("id", (m) => "id" + m.name)
-        .attr("cy", (m, i) => {
-            // get host planet location and data
-            let hostY = +d3.select("#id" + m.orbits_planet).attr("cy")
-            let hostPlanet = data.find(d => d.name === m.orbits_planet)
-            
-            // Scale y-spread proportional to planet's distance from sun plus some factor of moon count
-            let distanceScale = (hostPlanet.moon_count) * 0.3 + 10;
-            let yOffset = normalRandom(0, distanceScale)
-
-            return hostY + yOffset
-        })
-        .attr("cx", (m, i) => {
-            // get host planet location
-            let hostX = +d3.select("#id" + m.orbits_planet).attr("cx")
-            let hostPlanet = data.find(d => d.name === m.orbits_planet)
-            
-            // Sample from normal distribution, bounded to the right
-            let xOffset = normalRandom(hostPlanet.moon_count + 30, hostPlanet.moon_count * 0.4 + 10);
-            
-            return hostX + xOffset
-        })
+        .attr("cy", (m) => m._moonY)
+        .attr("cx", (m) => m._moonX)
         .attr("r", 2)
 
     visSvg.selectAll("circle.moon").each(function(m) {
