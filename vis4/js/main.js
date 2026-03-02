@@ -1,17 +1,11 @@
-// Create svg canvas
-const width = 1100;  
+// ==========================
+// Constants & Dimensions
+// ==========================
+const width = 1100;
 const height = 800;
-
-const svg = d3.select("#vis4")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-// Panel dimensions
 const panelWidth = 800 / 2;
 const panelHeight = height / 2;
 
-// Define the 4 systems
 const panels = [
     { name: "Sun", x: 0, y: 0 },
     { name: "Saturn", x: panelWidth, y: 0 },
@@ -19,144 +13,106 @@ const panels = [
     { name: "Uranus", x: panelWidth, y: panelHeight }
 ];
 
-// Load data
-d3.csv("data/sol_data.csv").then(data => {
+const centralColors = {
+    Sun: "#ffdd33",
+    Saturn: "#f5e134",
+    Neptune: "#1f466f",
+    Uranus: "#79c8ed"
+};
 
-    data.forEach(d => {
-        d.eccentricity = +d.eccentricity;
-        d.meanRadius = +d.meanRadius;
-    });
+// ==========================
+// SVG Canvas
+// ==========================
+const svg = d3.select("#vis4")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height);
 
-    data.sort((a, b) => b.eccentricity - a.eccentricity);
-
-    let mostEccentric = data.slice(0, 5);
-    let earth = data.find(d => d.eName === "Earth");
-    if (earth) mostEccentric.push(earth);
-
-    // Planet size scale
-    let radiusScale = d3.scaleSqrt()
-        .domain([0, d3.max(data, d => d.meanRadius)])
-        .range([4, 18]);
-
-    // Categorical color scale
-    const colorScale = d3.scaleOrdinal(d3.schemeTableau10)
-        .domain(mostEccentric.map(d => d.eName));
-
-    // Create panel groups
-    const panelGroups = svg.selectAll(".panel")
-        .attr("class", "panel")
-        .attr("id", d => `panel-${d.name.toLowerCase()}`)
-        .data(panels)
-        .enter()
-        .append("g")
-        .attr("class", "panel")
-        .attr("transform", d => `translate(${d.x}, ${d.y})`);
-
-    // Panel titles
-    panelGroups.append("text")
-        .attr("x", panelWidth / 2)  // Center the title horizontally
-        .attr("y", 30)             // Position the title just above the panel
-        .attr("text-anchor", "middle") // Center the text horizontally
-        .attr("font-size", 16)
-        .attr("font-weight", "bold")
-        .text(d => d.name);
-
-    panelGroups.select("#panel-sun")
-        .append("text")
-        .attr("x", panelWidth / 2)
-        .attr("y", 50)
-        .attr("text-anchor", "middle")
-        .attr("font-size", 12)
-        .attr("fill", "gray")
-        .text("Note: Sun's orbiting bodies are shown for comparison");
-
-    // Panel borders
-    panelGroups.append("rect")
+// ==========================
+// Helper Functions
+// ==========================
+function createPanel(group, panel) {
+    // Panel border
+    group.append("rect")
         .attr("width", panelWidth)
         .attr("height", panelHeight)
-        .attr("fill", "none")
-        .attr("stroke", "#ddd");
+        .attr("fill", "transparent")
+        .attr("stroke", "#444");
 
-    // Draw each system
-    panelGroups.each(function(panel) {
+    // Panel title
+    group.append("text")
+        .attr("x", panelWidth / 2)
+        .attr("y", 30)
+        .attr("text-anchor", "middle")
+        .attr("font-size", 20)
+        .attr("font-weight", "bold")
+        .text(panel.name);
 
-        const g = d3.select(this);
-        const centerX = panelWidth / 2;
-        const centerY = panelHeight / 2;
+    // Optional note for Sun
+    if (panel.name === "Sun") {
+        group.append("text")
+            .attr("x", panelWidth / 2)
+            .attr("y", 60)
+            .attr("text-anchor", "middle")
+            .attr("font-size", 12)
+            .attr("fill", "#aaa")
+            .text("Note: Sun's orbiting bodies are shown for comparison");
+    }
+}
 
-        const centralBody = data.find(d => d.eName === panel.name);
-        if (!centralBody) return;
+function drawCentralBody(group, centerX, centerY, centralBody) {
+    group.append("circle")
+        .attr("cx", centerX)
+        .attr("cy", centerY)
+        .attr("r", radiusScale(centralBody.meanRadius))
+        .attr("fill", centralColors[centralBody.eName])
+        .attr("stroke", centralBody.eName === "Sun" ? "orange" : "black");
+}
 
-        // Central body color
-        const centralColors = {
-            Sun: "yellow",
-            Saturn: "#f5e134",
-            Neptune: "#1f466f",
-            Uranus: "#79c8ed"
-        };
+function drawOrbitingBodies(group, panel, centralBody, orbiters) {
+    const centerX = panelWidth / 2;
+    const centerY = panelHeight / 2 + 20;
+    const baseA = 80;
+    const spacing = 45;
 
-        // Draw central body
-        g.append("circle")
+    orbiters.forEach((obj, i) => {
+        const e = obj.eccentricity;
+        const a = baseA + i * spacing;
+        const c = a * e;
+        const b = a * Math.sqrt(1 - e * e);
+        
+        // Draw the planet at the focus of the orbit, so the center of the ellipse is shifted by c from the focus
+        const focusX = centerX - c;
+
+        // Draw the orbit
+        group.append("ellipse")
             .attr("cx", centerX)
             .attr("cy", centerY)
-            .attr("r", radiusScale(centralBody.meanRadius))
-            .attr("fill", centralColors[panel.name])
-            .attr("stroke", panel.name === "Sun" ? "orange" : "black");
+            .attr("rx", a)
+            .attr("ry", b)
+            .attr("fill", "none")
+            .attr("stroke", colorScale(obj.eName))
+            .attr("stroke-dasharray", "2,4")
+            .attr("stroke-width", 2);
 
-        // Orbiting objects
-        const orbiters = mostEccentric.filter(obj => {
-            if (panel.name === "Sun") return obj.orbits === "NA";
-            return obj.orbits === panel.name;
-        });
+        // Draw the orbiting object
+        group.append("circle")
+            .attr("cx", centerX + a)
+            .attr("cy", centerY)
+            .attr("r", radiusScale(obj.meanRadius))
+            .attr("fill", colorScale(obj.eName))
+            .attr("stroke", "#333");
 
-        const baseA = 60;
-        const spacing = 35;
+        // Draw the central body at the focus of the first orbit
+        if (i === 0) {
+            drawCentralBody(group, focusX, centerY, centralBody);
+        }
+    });
+}
 
-        orbiters.forEach((object, i) => {
-
-            const e = object.eccentricity;
-            const a = baseA + i * spacing;
-            const c = a * e;
-            const b = a * Math.sqrt(1 - e * e);
-
-            const cx = centerX - c;
-            const cy = centerY;
-
-            const planetColor = colorScale(object.eName);
-
-            // Orbit
-            g.append("ellipse")
-                .attr("cx", cx)
-                .attr("cy", cy)
-                .attr("rx", a)
-                .attr("ry", b)
-                .attr("fill", "none")
-                .attr("stroke", planetColor)
-                .attr("stroke-width", 2);
-
-            // Size proportional to central body
-            const centralRadius = radiusScale(centralBody.meanRadius);
-
-            // Control how large orbiting objects appear relative to parent
-            const proportionalFactor = 0.25;
-
-            const orbitingRadius = centralRadius * proportionalFactor;
-
-            g.append("circle")
-                .attr("cx", cx + a)
-                .attr("cy", cy)
-                .attr("r", orbitingRadius)
-                .attr("fill", planetColor)
-                .attr("stroke", "black");
-
-            });
-
-        });
-
-    
-    // ------- Legend -------
+function createLegend(svg, mostEccentric) {
     const legend = svg.append("g")
-        .attr("transform", `translate(820, 60)`);
+        .attr("transform", `translate(900, 60)`);
 
     legend.append("text")
         .text("Orbiting Bodies")
@@ -174,11 +130,66 @@ d3.csv("data/sol_data.csv").then(data => {
     legendItems.append("text")
         .attr("x", 20)
         .attr("y", 5)
-        .text((d, i) => d.discoveryDate != "NA" ? `${i + 1}. ${d.eName} (${d.discoveryDate})` : `${i + 1}. ${d.eName}`)
-        .attr("font-size", 14);
+        .attr("font-size", 14)
+        .text((d, i) => d.discoveryDate != "NA" ? `${i + 1}. ${d.eName} (${d.discoveryDate})` : `${i + 1}. ${d.eName}`);
 
     legendItems.append("circle")
         .attr("r", 8)
         .attr("fill", d => colorScale(d.eName))
-        .attr("stroke", "black");
+        .attr("stroke", "#333");
+}
+
+// ==========================
+// Load Data & Draw
+// ==========================
+d3.csv("data/sol_data.csv").then(data => {
+
+    // Parse numeric fields
+    data.forEach(d => {
+        d.eccentricity = +d.eccentricity;
+        d.meanRadius = +d.meanRadius;
+    });
+
+    // Top eccentric bodies
+    data.sort((a, b) => b.eccentricity - a.eccentricity);
+    let mostEccentric = data.slice(0, 5);
+    const earth = data.find(d => d.eName === "Earth");
+    if (earth) mostEccentric.push(earth);
+
+    // Define scales
+    radiusScale = d3.scaleSqrt()
+        .domain([0, d3.max(data, d => d.meanRadius)])
+        .range([6, 27]);
+
+    colorScale = d3.scaleOrdinal(d3.schemeTableau10)
+        .domain(mostEccentric.map(d => d.eName));
+
+    // Create panels
+    const panelGroups = svg.selectAll(".panel")
+        .data(panels)
+        .enter()
+        .append("g")
+        .attr("class", "panel")
+        .attr("id", d => `panel-${d.name.toLowerCase()}`)
+        .attr("transform", d => `translate(${d.x}, ${d.y})`);
+
+    panelGroups.each(function(panel) {
+        const g = d3.select(this);
+        createPanel(g, panel);
+
+        const centralBody = data.find(d => d.eName === panel.name);
+        if (!centralBody) return;
+
+        // Filter orbiters
+        const orbiters = mostEccentric.filter(obj => {
+            if (panel.name === "Sun") return obj.orbits === "NA";
+            return obj.orbits === panel.name;
+        });
+
+        drawOrbitingBodies(g, panel, centralBody, orbiters);
+        
+    });
+
+    // Draw legend
+    createLegend(svg, mostEccentric);
 });
