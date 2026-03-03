@@ -3,30 +3,38 @@
 /* ================================================= */
 
 :root {
-  --bg-main: #0b0f17;
-  --panel: #101827;
+  --bg-main: #000000;   /* pure black */
+  --panel: #000000; 
   --text-main: #ffffff;
   --muted: #9fb0d0;
   --stroke: #2a3550;
 }
 
 body {
-  background-color: var(--bg-main);
-  color: var(--text-main);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  margin: 0;
+  background-color: #000000;
+  color: #e8e8f0;
+  font-family: 'Orbitron', 'Roboto', sans-serif;
   text-align: center;
 }
 
-h1, h2, h3 {
-  margin-top: 20px;
+h1 {
+  color: #cde1ff;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-shadow: 0 0 6px rgba(255,255,255,0.4),
+               0 0 12px rgba(173,216,230,0.2);
+}
+
+h2, h3, h4, p {
+  color: #9fc8ff;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-shadow: 0 0 4px rgba(255,255,255,0.2);
 }
 
 .center-text {
-  text-align: center;
-  color: white;
-  font-size: large;
-  margin: 10px 0;
+  color: #ffffff;
+  text-shadow: 0 0 4px rgba(255,255,255,0.3);
 }
 
 .center-button {
@@ -42,10 +50,13 @@ svg {
   background-color: var(--bg-main);
 }
 
+/* Base styling for all SVG text with glow */
 svg text {
-  fill: white;
+  font-family: 'Orbitron', 'Roboto', sans-serif;
+  fill: #cde1ff;
+  letter-spacing: 0.5px;
+  filter: url(#text-glow);
   pointer-events: none;
-  font-weight: 600;
 }
 
 .axis path,
@@ -61,20 +72,113 @@ svg text {
 /* ================= NAV BUTTON ==================== */
 /* ================================================= */
 
-.navBtn {
-  background: black;
-  color: white;
-  border: 2px solid white;
+/* .navBtn {
+  background: #000;
+  color: #cde1ff;
+  border: 2px solid #cde1ff;
   padding: 14px 40px;
   font-size: 18px;
+  font-weight: 700;
   border-radius: 30px;
   cursor: pointer;
+  text-shadow: 0 0 6px rgba(205,225,255,0.6),
+               0 0 12px rgba(118,199,192,0.3);
+  transition: all 0.3s ease;
+}
+
+.navBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,255,255,0.5);
+} */
+ /* .navBtn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #cde1ff;
+  padding: 14px 40px;
+  border-radius: 16px;
+  font-weight: 600;
+  backdrop-filter: blur(6px);
+  transition: all 0.3s ease;
+}
+
+.navBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,255,255,0.4);
+} */
+
+/* .navBtn {
+  background: linear-gradient(135deg, #4fcadd, #1670a1);
+  color: #000;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  padding: 12px 36px;
+  text-shadow: 0 0 4px rgba(0,0,0,0.3);
+  transition: all 0.2s ease;
+}
+
+.navBtn:hover {
+  background: linear-gradient(135deg, #6cdae0, #3dafd2);
+  transform: scale(1.05);
+} */
+
+/* .navBtn {
+  background: #000;
+  color: #cde1ff;
+  border: 2px solid #cde1ff;
+  border-radius: 30px;
+  padding: 14px 40px;
+  font-weight: 700;
+  text-shadow: 0 0 8px #cde1ff, 0 0 16px #3dafd2;
+  animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 6px #cde1ff; }
+  50% { box-shadow: 0 0 20px #3dafd2; }
+  100% { box-shadow: 0 0 12px #1670a1; }
+}
+
+.navBtn:hover {
+  transform: scale(1.05);
+} */
+
+.navBtn {
+  background: #000;
+  color: #0ff;  /* cyan glow */
+  border: 2px solid #0ff;
+  padding: 12px 36px;
+  border-radius: 8px;
+  font-size: 18px;
+  box-shadow: 0 0 10px #0ff, 0 0 20px #0ff inset;
   transition: 0.3s ease;
 }
 
 .navBtn:hover {
-  background: white;
-  color: black;
+  box-shadow: 0 0 20px #0ff, 0 0 40px #0ff inset;
+  color: #fff;
+  background: #0ff1;
+}
+
+/* Regular planet labels */
+.planet-label {
+  font-weight: 600;
+  font-size: 14px;
+  text-anchor: middle;  /* horizontal centering */
+}
+
+/* Small labels */
+.planet-label-small {
+  font-weight: 400;
+  font-size: 12px;
+}
+
+/* Hover text, etc. */
+.hover-text {
+  font-weight: 600;
+  font-size: 14px;
+  text-anchor: middle;
 }
 
 /* ================================================= */
@@ -369,10 +473,3 @@ svg text {
   background-color: #0b0f17; /* dark background */
 }
 
-/* Force SVG text white inside Vis3 and Vis4 */
-#vis3 text,
-#vis4 text {
-  fill: white;
-  font-weight: 600;  /* optional for consistency with Vis1 */
-  pointer-events: none;
-}

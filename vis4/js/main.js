@@ -53,7 +53,7 @@ d3.csv("data/sol_data.csv").then(data => {
         .attr("transform", d => `translate(${d.x}, ${d.y})`);
 
     // Panel titles
-    panelGroups.append("text")
+    panelGroups.append("text").attr("class", "planet-text")
         .attr("x", panelWidth / 2)  // Center the title horizontally
         .attr("y", 30)             // Position the title just above the panel
         .attr("text-anchor", "middle") // Center the text horizontally
@@ -62,7 +62,7 @@ d3.csv("data/sol_data.csv").then(data => {
         .text(d => d.name);
 
     panelGroups.select("#panel-sun")
-        .append("text")
+        .append("text").attr("class", "planet-text")
         .attr("x", panelWidth / 2)
         .attr("y", 50)
         .attr("text-anchor", "middle")
@@ -158,7 +158,7 @@ d3.csv("data/sol_data.csv").then(data => {
     const legend = svg.append("g")
         .attr("transform", `translate(820, 60)`);
 
-    legend.append("text")
+    legend.append("text").attr("class", "planet-text")
         .text("Orbiting Bodies")
         .attr("font-size", 16)
         .attr("font-weight", "bold")
@@ -171,7 +171,7 @@ d3.csv("data/sol_data.csv").then(data => {
         .attr("class", "legend-item")
         .attr("transform", (d, i) => `translate(0, ${i * 30})`);
 
-    legendItems.append("text")
+    legendItems.append("text").attr("class", "planet-text")
         .attr("x", 20)
         .attr("y", 5)
         .text((d, i) => d.discoveryDate != "NA" ? `${i + 1}. ${d.eName} (${d.discoveryDate})` : `${i + 1}. ${d.eName}`)
