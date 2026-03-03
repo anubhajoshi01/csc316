@@ -20,6 +20,12 @@ const centralColors = {
     Uranus: "#79c8ed"
 };
 
+let isAnimating = false;
+const animationTasks = [];
+let mainTimer;
+let startTime = 0;
+let pausedAt = 0;
+
 // ==========================
 // SVG Canvas
 // ==========================
@@ -96,7 +102,7 @@ function drawOrbitingBodies(group, panel, centralBody, orbiters) {
             .attr("stroke-width", 2);
 
         // Draw the orbiting object
-        group.append("circle")
+        const orbiter = group.append("circle")
             .attr("cx", centerX + a)
             .attr("cy", centerY)
             .attr("r", radiusScale(obj.meanRadius))
@@ -107,6 +113,29 @@ function drawOrbitingBodies(group, panel, centralBody, orbiters) {
         if (i === 0) {
             drawCentralBody(group, focusX, centerY, centralBody);
         }
+
+        // ==========================
+        // Animation Toggle Logic (AI coded)
+        // ==========================
+        const baseSpeed = 0.001 / (Math.sqrt(a) * 0.2);
+        
+        // We need to track the current angle for each orbiter individually
+        let currentAngle = 0;
+        
+        animationTasks.push((elapsed, deltaTime) => {
+            // Calculate current position's distance from the focus
+            const r = (a * (1 - Math.pow(e, 2))) / (1 + e * Math.cos(currentAngle));
+
+            const angularVelocity = baseSpeed / (Math.pow(a, 2) / Math.pow(r, 2)) * speedMultiplier;
+            
+            // Update the angle based on the new velocity
+            currentAngle += angularVelocity * (deltaTime || 16);
+
+            // Update the visual position
+            orbiter
+                .attr("cx", centerX + a * Math.cos(currentAngle))
+                .attr("cy", centerY + b * Math.sin(currentAngle));
+        });
     });
 }
 
@@ -192,4 +221,39 @@ d3.csv("data/sol_data.csv").then(data => {
 
     // Draw legend
     createLegend(svg, mostEccentric);
+});
+
+// ==========================
+// Animation Toggle Logic (AI coded)
+// ==========================
+let lastTime = 0;
+
+d3.select("#orbit-toggle").on("click", function() {
+    isAnimating = !isAnimating;
+    const btn = d3.select(this);
+
+    if (isAnimating) {
+        btn.text("Stop Animation");
+        lastTime = performance.now(); // Reset lastTime on start
+        
+        mainTimer = d3.timer(() => {
+            const now = performance.now();
+            const deltaTime = now - lastTime;
+            lastTime = now;
+
+            // Pass deltaTime to each task
+            animationTasks.forEach(task => task(now, deltaTime));
+        });
+    } else {
+        btn.text("Start Animation");
+        if (mainTimer) mainTimer.stop();
+    }
+});
+
+let speedMultiplier = 1;
+
+// Listener for the slider
+d3.select("#speed-slider").on("input", function() {
+    speedMultiplier = +this.value;
+    d3.select("#speed-value").text(speedMultiplier + "x");
 });
