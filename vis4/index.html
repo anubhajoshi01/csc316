@@ -7,6 +7,7 @@
   <!-- D3 library -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <link rel="stylesheet" type="text/css" href="../css/styles.css">
+  <link rel="stylesheet" type="text/css" href="./css/styles.css">
 
 </head>
 
@@ -14,8 +15,21 @@
   <h1 class="title">Which bodies have the least circular orbits?</h1>
   <p id="description">Earth's orbit has a low eccentricity, which means it is nearly circular. This is included as a point of comparison.</p>
 
-  <!-- vis container -->
-  <div id="vis4"></div>
+  <div style="position: relative; width: 1100px; margin: 0 auto;">
+    <div id="vis4"></div>
+    
+    <div class="controls-side" style="position: absolute; top: 350px; right: 10px;">
+      <button id="orbit-toggle" >
+        Start Orbits
+      </button>
+
+      <div class="slider-container">
+        <label for="speed-slider">Warp Speed</label>
+        <input type="range" id="speed-slider" min="0.1" max="5" step="0.1" value="1">
+        <span id="speed-value">1x</span>
+      </div>
+    </div>
+  </div>
 
   <script src="js/main.js"></script>
 
