@@ -167,6 +167,8 @@ controls.append("button")
 // -----------------------------------------
 // Throw animation (AI coded)
 // -----------------------------------------
+const PLANET_R = 16;
+
 function throwPlanet(name) {
     if (placed.has(name)) return;
 
@@ -177,7 +179,7 @@ function throwPlanet(name) {
     const x = xAxis(p.g);
 
     // Keep base radii; CSS will scale visually via transform: scale(--scale)
-    const planetR = (p.name === "Jupiter") ? 22 : 16;
+    const planetR = PLANET_R;
     const planetY = groundY - planetR;
 
     // Constant arc height
@@ -204,10 +206,13 @@ function throwPlanet(name) {
     const cls = String(p.name).toLowerCase(); // "Jupiter" -> "jupiter"
 
     const ball = planetLayer.append("circle")
-        .attr("class", `planet ${cls}`)  // matches .planet.jupiter, .planet.earth, etc
+        .attr("class", `planet ${cls}`)
         .attr("r", planetR)
         .attr("cx", throwX)
-        .attr("cy", throwY);
+        .attr("cy", throwY)
+        // this part of style is not in .css file since this vis has different planet size
+        // from the united style file
+        .style("--scale", 1)
 
     // Animate along the arc using getPointAtLength
     ball.transition()
@@ -225,7 +230,7 @@ function throwPlanet(name) {
                     .attr("class", "saturn-ring")
                     .attr("cx", x)
                     .attr("cy", planetY)
-                    .attr("rx", planetR + 25)
+                    .attr("rx", planetR + 10)
                     .attr("ry", 6);
             }
 
