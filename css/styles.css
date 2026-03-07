@@ -17,13 +17,14 @@ body {
   text-align: center;
 }
 
+
 h1 {
+  font-family: 'Orbitron', 'Roboto', sans-serif;
   color: #cde1ff;
-  font-weight: 800;
-  letter-spacing: 1.2px;
-  text-shadow: 0 0 6px rgba(255,255,255,0.4),
-               0 0 12px rgba(173,216,230,0.2);
+  letter-spacing: 0.6px;
+  font-weight: 600;
 }
+
 
 h2, h3, h4, p {
   color: #9fc8ff;
@@ -72,7 +73,7 @@ svg text {
 /* ================= NAV BUTTON ==================== */
 /* ================================================= */
 
-/* .navBtn {
+.navBtn {
   background: #000;
   color: #cde1ff;
   border: 2px solid #cde1ff;
@@ -89,76 +90,6 @@ svg text {
 .navBtn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0,255,255,0.5);
-} */
- /* .navBtn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255,255,255,0.3);
-  color: #cde1ff;
-  padding: 14px 40px;
-  border-radius: 16px;
-  font-weight: 600;
-  backdrop-filter: blur(6px);
-  transition: all 0.3s ease;
-}
-
-.navBtn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0,255,255,0.4);
-} */
-
-/* .navBtn {
-  background: linear-gradient(135deg, #4fcadd, #1670a1);
-  color: #000;
-  border: none;
-  border-radius: 12px;
-  font-weight: 700;
-  padding: 12px 36px;
-  text-shadow: 0 0 4px rgba(0,0,0,0.3);
-  transition: all 0.2s ease;
-}
-
-.navBtn:hover {
-  background: linear-gradient(135deg, #6cdae0, #3dafd2);
-  transform: scale(1.05);
-} */
-
-/* .navBtn {
-  background: #000;
-  color: #cde1ff;
-  border: 2px solid #cde1ff;
-  border-radius: 30px;
-  padding: 14px 40px;
-  font-weight: 700;
-  text-shadow: 0 0 8px #cde1ff, 0 0 16px #3dafd2;
-  animation: glow 2s infinite alternate;
-}
-
-@keyframes glow {
-  0% { box-shadow: 0 0 6px #cde1ff; }
-  50% { box-shadow: 0 0 20px #3dafd2; }
-  100% { box-shadow: 0 0 12px #1670a1; }
-}
-
-.navBtn:hover {
-  transform: scale(1.05);
-} */
-
-.navBtn {
-  background: #000;
-  color: #0ff;  /* cyan glow */
-  border: 2px solid #0ff;
-  padding: 12px 36px;
-  border-radius: 8px;
-  font-size: 18px;
-  box-shadow: 0 0 10px #0ff, 0 0 20px #0ff inset;
-  transition: 0.3s ease;
-}
-
-.navBtn:hover {
-  box-shadow: 0 0 20px #0ff, 0 0 40px #0ff inset;
-  color: #fff;
-  background: #0ff1;
 }
 
 /* Regular planet labels */
