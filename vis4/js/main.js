@@ -20,11 +20,15 @@ const centralColors = {
     Uranus: "#79c8ed"
 };
 
+let radiusScale;
+let colorScale;
+
 let isAnimating = false;
 const animationTasks = [];
 let mainTimer;
-let startTime = 0;
-let pausedAt = 0;
+let lastTime = 0;
+let speedMultiplier = 1;
+
 
 // ==========================
 // SVG Canvas
@@ -34,18 +38,20 @@ const svg = d3.select("#vis4")
     .attr("width", width)
     .attr("height", height);
 
+
 // ==========================
-// Helper Functions
+// Panel Creation
 // ==========================
 function createPanel(group, panel) {
-    // Panel border
+
+    // Border
     group.append("rect")
         .attr("width", panelWidth)
         .attr("height", panelHeight)
-        .attr("fill", "transparent")
+        .attr("fill", "none")
         .attr("stroke", "#444");
 
-    // Panel title
+    // Title
     group.append("text")
         .attr("x", panelWidth / 2)
         .attr("y", 30)
@@ -54,7 +60,7 @@ function createPanel(group, panel) {
         .attr("font-weight", "bold")
         .text(panel.name);
 
-    // Optional note for Sun
+    // Sun note
     if (panel.name === "Sun") {
         group.append("text")
             .attr("x", panelWidth / 2)
@@ -66,31 +72,42 @@ function createPanel(group, panel) {
     }
 }
 
-function drawCentralBody(group, centerX, centerY, centralBody) {
+
+// ==========================
+// Draw Central Body
+// ==========================
+function drawCentralBody(group, x, y, body) {
+
     group.append("circle")
-        .attr("cx", centerX)
-        .attr("cy", centerY)
-        .attr("r", radiusScale(centralBody.meanRadius))
-        .attr("fill", centralColors[centralBody.eName])
-        .attr("stroke", centralBody.eName === "Sun" ? "orange" : "black");
+        .attr("cx", x)
+        .attr("cy", y)
+        .attr("r", radiusScale(body.meanRadius))
+        .attr("fill", centralColors[body.eName])
+        .attr("stroke", body.eName === "Sun" ? "orange" : "black");
 }
 
+
+// ==========================
+// Draw Orbits
+// ==========================
 function drawOrbitingBodies(group, panel, centralBody, orbiters) {
+
     const centerX = panelWidth / 2;
     const centerY = panelHeight / 2 + 20;
+
     const baseA = 80;
     const spacing = 45;
 
     orbiters.forEach((obj, i) => {
+
         const e = obj.eccentricity;
         const a = baseA + i * spacing;
         const c = a * e;
         const b = a * Math.sqrt(1 - e * e);
-        
-        // Draw the planet at the focus of the orbit, so the center of the ellipse is shifted by c from the focus
+
         const focusX = centerX - c;
 
-        // Draw the orbit
+        // Draw orbit
         group.append("ellipse")
             .attr("cx", centerX)
             .attr("cy", centerY)
@@ -101,7 +118,7 @@ function drawOrbitingBodies(group, panel, centralBody, orbiters) {
             .attr("stroke-dasharray", "2,4")
             .attr("stroke-width", 2);
 
-        // Draw the orbiting object
+        // Draw orbiter
         const orbiter = group.append("circle")
             .attr("cx", centerX + a)
             .attr("cy", centerY)
@@ -109,39 +126,40 @@ function drawOrbitingBodies(group, panel, centralBody, orbiters) {
             .attr("fill", colorScale(obj.eName))
             .attr("stroke", "#333");
 
-        // Draw the central body at the focus of the first orbit
+        // Draw central body once
         if (i === 0) {
             drawCentralBody(group, focusX, centerY, centralBody);
         }
 
-        // ==========================
-        // Animation Toggle Logic (AI coded)
-        // ==========================
+        // ======================
+        // Animation
+        // ======================
         const baseSpeed = 0.001 / (Math.sqrt(a) * 0.2);
-        
-        // We need to track the current angle for each orbiter individually
         let currentAngle = 0;
-        
-        animationTasks.push((elapsed, deltaTime) => {
-            // Calculate current position's distance from the focus
-            const r = (a * (1 - Math.pow(e, 2))) / (1 + e * Math.cos(currentAngle));
 
-            const angularVelocity = baseSpeed / (Math.pow(a, 2) / Math.pow(r, 2)) * speedMultiplier;
-            
-            // Update the angle based on the new velocity
+        animationTasks.push((elapsed, deltaTime) => {
+
+            const r = (a * (1 - e ** 2)) / (1 + e * Math.cos(currentAngle));
+            const angularVelocity = baseSpeed / ((a ** 2) / (r ** 2)) * speedMultiplier;
+
             currentAngle += angularVelocity * (deltaTime || 16);
 
-            // Update the visual position
             orbiter
                 .attr("cx", centerX + a * Math.cos(currentAngle))
                 .attr("cy", centerY + b * Math.sin(currentAngle));
         });
+
     });
 }
 
+
+// ==========================
+// Legend
+// ==========================
 function createLegend(svg, mostEccentric) {
+
     const legend = svg.append("g")
-        .attr("transform", `translate(900, 60)`);
+        .attr("transform", `translate(900,60)`);
 
     legend.append("text")
         .text("Orbiting Bodies")
@@ -149,111 +167,120 @@ function createLegend(svg, mostEccentric) {
         .attr("font-weight", "bold")
         .attr("y", -20);
 
-    const legendItems = legend.selectAll(".legend-item")
+    const items = legend.selectAll(".legend-item")
         .data(mostEccentric)
         .enter()
         .append("g")
-        .attr("class", "legend-item")
-        .attr("transform", (d, i) => `translate(0, ${i * 30})`);
+        .attr("transform", (d,i) => `translate(0,${i*30})`);
 
-    legendItems.append("text")
-        .attr("x", 20)
-        .attr("y", 5)
-        .attr("font-size", 14)
-        .text((d, i) => d.discoveryDate != "NA" ? `${i + 1}. ${d.eName} (${d.discoveryDate})` : `${i + 1}. ${d.eName}`);
-
-    legendItems.append("circle")
+    items.append("circle")
         .attr("r", 8)
         .attr("fill", d => colorScale(d.eName))
         .attr("stroke", "#333");
+
+    items.append("text")
+        .attr("x", 20)
+        .attr("y", 5)
+        .attr("font-size", 14)
+        .text((d,i) =>
+            d.discoveryDate !== "NA"
+            ? `${i+1}. ${d.eName} (${d.discoveryDate})`
+            : `${i+1}. ${d.eName}`
+        );
 }
 
+
 // ==========================
-// Load Data & Draw
+// Load Data
 // ==========================
 d3.csv("data/sol_data.csv").then(data => {
 
-    // Parse numeric fields
     data.forEach(d => {
         d.eccentricity = +d.eccentricity;
         d.meanRadius = +d.meanRadius;
     });
 
-    // Top eccentric bodies
-    data.sort((a, b) => b.eccentricity - a.eccentricity);
-    let mostEccentric = data.slice(0, 5);
+    data.sort((a,b) => b.eccentricity - a.eccentricity);
+
+    let mostEccentric = data.slice(0,5);
+
     const earth = data.find(d => d.eName === "Earth");
     if (earth) mostEccentric.push(earth);
 
-    // Define scales
+    // Scales
     radiusScale = d3.scaleSqrt()
-        .domain([0, d3.max(data, d => d.meanRadius)])
-        .range([6, 27]);
+        .domain([0, d3.max(data,d=>d.meanRadius)])
+        .range([6,27]);
 
     colorScale = d3.scaleOrdinal(d3.schemeTableau10)
-        .domain(mostEccentric.map(d => d.eName));
+        .domain(mostEccentric.map(d=>d.eName));
 
-    // Create panels
+    // Panels
     const panelGroups = svg.selectAll(".panel")
         .data(panels)
         .enter()
         .append("g")
-        .attr("class", "panel")
-        .attr("id", d => `panel-${d.name.toLowerCase()}`)
-        .attr("transform", d => `translate(${d.x}, ${d.y})`);
+        .attr("class","panel")
+        .attr("transform", d=>`translate(${d.x},${d.y})`);
 
-    panelGroups.each(function(panel) {
+    panelGroups.each(function(panel){
+
         const g = d3.select(this);
-        createPanel(g, panel);
 
-        const centralBody = data.find(d => d.eName === panel.name);
-        if (!centralBody) return;
+        createPanel(g,panel);
 
-        // Filter orbiters
-        const orbiters = mostEccentric.filter(obj => {
-            if (panel.name === "Sun") return obj.orbits === "NA";
-            return obj.orbits === panel.name;
+        const centralBody = data.find(d=>d.eName===panel.name);
+        if(!centralBody) return;
+
+        const orbiters = mostEccentric.filter(obj=>{
+            if(panel.name==="Sun") return obj.orbits==="NA";
+            return obj.orbits===panel.name;
         });
 
-        drawOrbitingBodies(g, panel, centralBody, orbiters);
-        
+        drawOrbitingBodies(g,panel,centralBody,orbiters);
     });
 
-    // Draw legend
     createLegend(svg, mostEccentric);
 });
 
-// ==========================
-// Animation Toggle Logic (AI coded)
-// ==========================
-let lastTime = 0;
 
-d3.select("#orbit-toggle").on("click", function() {
+// ==========================
+// Animation Toggle
+// ==========================
+d3.select("#orbit-toggle").on("click", function(){
+
     isAnimating = !isAnimating;
     const btn = d3.select(this);
 
-    if (isAnimating) {
+    if(isAnimating){
+
         btn.text("Stop Animation");
-        lastTime = performance.now(); // Reset lastTime on start
-        
-        mainTimer = d3.timer(() => {
+        lastTime = performance.now();
+
+        mainTimer = d3.timer(()=>{
+
             const now = performance.now();
             const deltaTime = now - lastTime;
             lastTime = now;
 
-            // Pass deltaTime to each task
             animationTasks.forEach(task => task(now, deltaTime));
         });
+
     } else {
+
         btn.text("Start Animation");
-        if (mainTimer) mainTimer.stop();
+        if(mainTimer) mainTimer.stop();
     }
 });
 
-let speedMultiplier = 1;
 
-// Listener for the slider
-d3.select("#speed-slider").on("input", function() {
+// ==========================
+// Speed Slider
+// ==========================
+d3.select("#speed-slider").on("input", function(){
+
     speedMultiplier = +this.value;
-    d3.select("#speed-value").text(speedMultiplier + "x");
+
+    d3.select("#speed-value")
+        .text(speedMultiplier + "x");
 });
