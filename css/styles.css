@@ -73,7 +73,7 @@ svg text {
 /* ================= NAV BUTTON ==================== */
 /* ================================================= */
 
-.navBtn {
+button.navBtn {
   background: #000;
   color: #cde1ff;
   border: 2px solid #cde1ff;
@@ -404,3 +404,73 @@ svg text {
   background-color: #0b0f17; /* dark background */
 }
 
+
+
+.controls-side {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background: rgba(38, 48, 81, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+}
+
+#orbit-toggle {
+    /* Position and Layout */
+    display: block;
+    margin: 20px auto;
+    padding: 12px 28px;
+    width: 200px;
+    
+    /* Typography */
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ffffff;
+
+    /* Styling */
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+#orbit-toggle:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #79c8ed; 
+    box-shadow: 0 0 15px rgba(121, 200, 237, 0.4);
+    transform: translateY(-1px);
+}
+
+.slider-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    font-family: sans-serif;
+    font-size: 12px;
+    gap: 8px;
+}
+
+input[type=range] {
+    writing-mode: bt-lr;
+    width: 200px;
+    cursor: pointer;
+}
+
+#speed-value {
+    font-weight: bold;
+    color: #79c8ed;
+}
