@@ -210,33 +210,38 @@ function drawVis(data, planetsOnly) {
     console.log("minyear", minYear)
     console.log("maxyear", maxYear)
 
-    let timescale = d3.scaleTime()
-		.range([0, 800])
-		.domain([minYear, maxYear]);
+    // make a timebar
+    var timebar = document.getElementById('timebar');
 
-    let timelineAxis = d3.axisBottom(timescale).scale(timescale)
-        .tickValues(timescale.ticks(5).concat(minYear, maxYear))
-        .tickFormat((d) => d3.format("d")(d))
-        .tickSize(10);
+    noUiSlider.create(timebar, {
+        start: [minYear+100, minYear+200],
+        connect: true,
+        range: {
+            'min': minYear,
+            'max': maxYear
+        },
+        step: 10
+    });
 
-    let timelineBrush = d3.brushX()
-		.extent([[0, -20], [800, 0]])
-		.on("brush", (event) => brushed(data,timescale, event));
+    var timeValues = [
+        document.getElementById('timebar').noUiSlider.get()
+    ];
 
-    visSvg.append("g")
-		.attr("class", "timescale")
-		.attr("transform", "translate(100, 30)")
-        .call(timelineBrush)
-        .call(timelineAxis);
+    console.log("timevalues", timeValues)
+
+    timebar.noUiSlider.on("update", (values) => onTimebarUpdate(values, data))
 }
 
-function brushed(data, timescale) {
+function onTimebarUpdate(values, data) {
+    console.log("update timebar values", values)
     // react to brushed event
-    let selection = d3.brushSelection(d3.select(".timescale").node());
-    console.log("selection", selection)
+    // let selection = d3.brushSelection(d3.select(".timescale").node());
+    // console.log("selection", selection)
+    let lowerYear = values[0];
+    let upperYear = values[1];
     for (let body of data) {
-        let x = timescale(body.discovery_year);
-        if (selection && x >= selection[0] && x <= selection[1]) {
+        let x = body.discovery_year;
+        if (x >= values[0] && x <= values[1]) {
             d3.select("#id" + body.name).style("fill", "red");
         } else {
             d3.select("#id" + body.name).style("fill", null);

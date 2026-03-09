@@ -288,6 +288,26 @@ svg text {
 /* Planets (only in #chart-area) */
 /* ========================= */
 
+/* Timebar styles */
+#timebar {
+  width: 75vw;
+  transform: translate(12.5vw, 0);
+}
+
+.noUi-target{
+  border-radius: 6px !important;
+  border: 2px solid var(--muted) !important;
+}
+
+.noUi-horizontal {
+  height: 10px !important;
+}
+
+.noUi-base {
+  background: #0c1322;
+  border: 1px solid var(--stroke);
+}
+
 #chart-area .planet {
     stroke: grey;
     stroke-width: 1px;
