@@ -213,9 +213,12 @@ function drawVis(data, planetsOnly) {
     // make a timebar
     var timebar = document.getElementById('timebar');
 
+    noUiSlider.cssClasses.target += '-timebar';
     noUiSlider.create(timebar, {
         start: [minYear+100, minYear+200],
         connect: true,
+        tooltips: 
+            { to: (year) => year},
         range: {
             'min': minYear,
             'max': maxYear
