@@ -3,30 +3,39 @@
 /* ================================================= */
 
 :root {
-  --bg-main: #0b0f17;
-  --panel: #101827;
+  --bg-main: #000000;   /* pure black */
+  --panel: #000000; 
   --text-main: #ffffff;
   --muted: #9fb0d0;
   --stroke: #2a3550;
 }
 
 body {
-  background-color: var(--bg-main);
-  color: var(--text-main);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  margin: 0;
+  background-color: #000000;
+  color: #e8e8f0;
+  font-family: 'Orbitron', 'Roboto', sans-serif;
   text-align: center;
 }
 
-h1, h2, h3 {
-  margin-top: 20px;
+
+h1 {
+  font-family: 'Orbitron', 'Roboto', sans-serif;
+  color: #cde1ff;
+  letter-spacing: 0.6px;
+  font-weight: 600;
+}
+
+
+h2, h3, h4, p {
+  color: #9fc8ff;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-shadow: 0 0 4px rgba(255,255,255,0.2);
 }
 
 .center-text {
-  text-align: center;
-  color: white;
-  font-size: large;
-  margin: 10px 0;
+  color: #ffffff;
+  text-shadow: 0 0 4px rgba(255,255,255,0.3);
 }
 
 .center-button {
@@ -42,10 +51,13 @@ svg {
   background-color: var(--bg-main);
 }
 
+/* Base styling for all SVG text with glow */
 svg text {
-  fill: white;
+  font-family: 'Orbitron', 'Roboto', sans-serif;
+  fill: #cde1ff;
+  letter-spacing: 0.5px;
+  filter: url(#text-glow);
   pointer-events: none;
-  font-weight: 600;
 }
 
 .axis path,
@@ -61,20 +73,43 @@ svg text {
 /* ================= NAV BUTTON ==================== */
 /* ================================================= */
 
-.navBtn {
-  background: black;
-  color: white;
-  border: 2px solid white;
+button.navBtn {
+  background: #000;
+  color: #cde1ff;
+  border: 2px solid #cde1ff;
   padding: 14px 40px;
   font-size: 18px;
+  font-weight: 700;
   border-radius: 30px;
   cursor: pointer;
-  transition: 0.3s ease;
+  text-shadow: 0 0 6px rgba(205,225,255,0.6),
+               0 0 12px rgba(118,199,192,0.3);
+  transition: all 0.3s ease;
 }
 
 .navBtn:hover {
-  background: white;
-  color: black;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,255,255,0.5);
+}
+
+/* Regular planet labels */
+.planet-label {
+  font-weight: 600;
+  font-size: 14px;
+  text-anchor: middle;  /* horizontal centering */
+}
+
+/* Small labels */
+.planet-label-small {
+  font-weight: 400;
+  font-size: 12px;
+}
+
+/* Hover text, etc. */
+.hover-text {
+  font-weight: 600;
+  font-size: 14px;
+  text-anchor: middle;
 }
 
 /* ================================================= */
@@ -389,10 +424,73 @@ svg text {
   background-color: #0b0f17; /* dark background */
 }
 
-/* Force SVG text white inside Vis3 and Vis4 */
-#vis3 text,
-#vis4 text {
-  fill: white;
-  font-weight: 600;  /* optional for consistency with Vis1 */
-  pointer-events: none;
+
+
+.controls-side {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background: rgba(38, 48, 81, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+}
+
+#orbit-toggle {
+    /* Position and Layout */
+    display: block;
+    margin: 20px auto;
+    padding: 12px 28px;
+    width: 200px;
+    
+    /* Typography */
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ffffff;
+
+    /* Styling */
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+#orbit-toggle:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #79c8ed; 
+    box-shadow: 0 0 15px rgba(121, 200, 237, 0.4);
+    transform: translateY(-1px);
+}
+
+.slider-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    font-family: sans-serif;
+    font-size: 12px;
+    gap: 8px;
+}
+
+input[type=range] {
+    writing-mode: bt-lr;
+    width: 200px;
+    cursor: pointer;
+}
+
+#speed-value {
+    font-weight: bold;
+    color: #79c8ed;
 }

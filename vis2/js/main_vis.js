@@ -95,7 +95,7 @@ function drawVis(data, planetsOnly) {
 
     planetLabels.enter().append("text")
         .text((p) => p.realName)
-        .attr("class", "planet-label")
+        .attr("class", "planet-label-small")
         .attr("text-anchor", (p) => moonlessPlanets.includes(p.name) ? "start" : "end")
         .attr("x", (p) => +d3.select("#id" + p.name).attr("cx") + (moonlessPlanets.includes(p.name) ? 12 : -15))
         .attr("y", (p) => +d3.select("#id" + p.name).attr("cy") + 5)

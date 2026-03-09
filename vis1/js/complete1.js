@@ -59,12 +59,12 @@ function drawPackedSun(data, containerName = "Sun") {
     .domain(data.children.map(d => d.name));
 
   // --- Hover text ---
-  const hoverText = svg.append("text")
+  const hoverText = svg.append("text").attr("class", "hover-text")
     .attr("x", width / 2)
     .attr("y", height - 20)
     .attr("text-anchor", "middle")
     .attr("font-family", "sans-serif")
-    .attr("font-size", "14px")
+    .attr("font-size", "12px")
     .attr("fill", "white")
     .text(`Hover over a body to see volume relative to ${containerName} and discovery date`);
 
