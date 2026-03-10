@@ -223,7 +223,8 @@ function drawVis(data, planetsOnly) {
             'min': minYear,
             'max': maxYear
         },
-        step: 10
+        step: 10,
+        margin: 10
     });
 
     var timeValues = [
