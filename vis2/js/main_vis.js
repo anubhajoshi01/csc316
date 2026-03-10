@@ -218,9 +218,9 @@ function drawVis(data, planetsOnly) {
         start: [minYear+100, minYear+200],
         connect: true,
         tooltips: 
-            { to: (year) => year},
+            { to: (year) => year === minYear - 10 ? "Antiquity": year},
         range: {
-            'min': minYear,
+            'min': minYear - 10,
             'max': maxYear
         },
         step: 10,
@@ -243,11 +243,16 @@ function onTimebarUpdate(values, data) {
     // console.log("selection", selection)
     let lowerYear = values[0];
     let upperYear = values[1];
+    
     for (let body of data) {
         let x = body.discovery_year;
-        if (x >= values[0] && x <= values[1]) {
+        if (x >= lowerYear && x <= upperYear) {
             d3.select("#id" + body.name).style("fill", "red");
-        } else {
+        } 
+        else if (isNaN(body.discovery_year) && (lowerYear < d3.min(data, (d) => d.discovery_year))) {
+            d3.select("#id" + body.name).style("fill", "red");
+        }
+        else {
             d3.select("#id" + body.name).style("fill", null);
         }
     }
