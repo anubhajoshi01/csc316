@@ -323,6 +323,66 @@ button.navBtn {
 /* Planets (only in #chart-area) */
 /* ========================= */
 
+/* Timebar styles */
+#timebar {
+  margin-top: 60px;
+  width: 75vw;
+  height: 10px;
+  transform: translate(12.5vw, 0);
+  /* padding-left: 6px;
+  padding-right: 5px; */
+}
+
+.noUi-target-timebar {
+  border-radius: 6px;
+  background: #0c1322;
+  border: 2px solid #628cc3;
+}
+
+.noUi-base {
+  background: #0c1322;
+  border-radius: 6px;
+}
+
+#timebar .noUi-handle {
+  border: 2px solid var(--muted);
+  border-radius: 40px;
+  background: #ffffff;
+  cursor: pointer;
+  height: 22px;
+  width: 24px;
+  transform: translate(0px, -2px);
+}
+
+/* prevent overlap of two handles */
+/* #timebar .noUi-handle-lower {
+    right: 0px;
+}
+#timebar .noUi-handle-upper {
+    right: -24px;
+} */
+
+#timebar .noUi-connect {
+  background: #bbfcf7;
+  height: 6px;
+  margin-top: 2px;
+}
+
+.noUi-handle::after, .noUi-handle::before {
+  background: None !important;
+}
+
+.noUi-horizontal .noUi-tooltip {
+  background: #331f37 !important;
+  color: #e4cdee !important;
+  border: 2px solid #8e5699 !important;
+  padding: 6.5px 6px 5px 5.5px
+}
+
+.noUi-horizontal .noUi-handle-lower .noUi-tooltip {
+  bottom: -40px !important;
+}
+
 #chart-area .planet {
     stroke: grey;
     stroke-width: 1px;

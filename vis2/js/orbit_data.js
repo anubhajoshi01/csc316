@@ -5,11 +5,14 @@ function orbitData(csvPath, discardNonPlanets = true) {
         cleanName = cleanName.replace(/\//g, "-");
         cleanName = cleanName.replace(/\(/g, "-");     // html-friendly for classes/ids
         cleanName = cleanName.replace(/\)/g, "-");     // html-friendly for classes/ids
+        cleanName = cleanName.replace(/'/g, "-");
 
         let cleanOrbits = d.orbits.replace(/ /g, "-");       // html-friendly for classes/ids
         cleanOrbits = cleanOrbits.replace(/\//g, "-");
         cleanOrbits = cleanOrbits.replace(/\(/g, "-");     // html-friendly for classes/ids
         cleanOrbits = cleanOrbits.replace(/\)/g, "-");     // html-friendly for classes/ids
+        cleanOrbits = cleanOrbits.replace(/'/g, "-");
+
         return {
             name: cleanName,
             realName: d.eName,

@@ -209,43 +209,46 @@ function drawVis(data, planetsOnly) {
     let maxYear = d3.max(data, (d) => d.discovery_year);
     console.log("minyear", minYear)
     console.log("maxyear", maxYear)
-    
-    // the number of sections we wanna have? subject to change
-    const NUM_TIMEPERIODS = 5;
 
-    const sectionWidth = 800 / NUM_TIMEPERIODS;
-    let colors = ["#074665ff", "#1670a1ff", "#3dafd2ff", "#4fcaddff", "#6cdae0ff", "#a4f1f1ff"]
+    // make a timebar
+    var timebar = document.getElementById('timebar');
 
-    // make it interactive
-    for (let i = 0; i <= NUM_TIMEPERIODS; i++) {
-        visSvg.append("rect")
-            .attr("id", "time-section-" + i)
-            .attr("x", 50 + i * sectionWidth)
-            .attr("y", 50)
-            .attr("width", sectionWidth)
-            .attr("height", 10)
-            .style("fill", colors[i]);
-        d3.select("#time-section-" + i).on("mouseover", function() {
-            d3.select(this).style("fill", "red")
-                .attr("height", 15)
-                .attr("y", 47.5);
-            for (let body of data) {
-                if ((body.discovery_year <= minYear + (i) * (maxYear - minYear) / NUM_TIMEPERIODS)
-                    && (body.discovery_year > minYear + (i-1) * (maxYear - minYear) / NUM_TIMEPERIODS)) {
-                    d3.select("#id" + body.name).style("fill", "red");
-                    console.log("body", body.name, body.discovery_year)
-                }
-            }
-        });
-        d3.select("#time-section-" + i).on("mouseout", function() {
-            d3.select(this).style("fill", colors[i])
-                .attr("height", 10)
-                .attr("y", 50);
-            for (let body of data) {
-                if (body.discovery_year <= minYear + (i) * (maxYear - minYear) / NUM_TIMEPERIODS) {
-                    d3.select("#id" + body.name).style("fill", null);
-                }
-            }
-        });
+    noUiSlider.cssClasses.target += '-timebar';
+    noUiSlider.create(timebar, {
+        start: [minYear+100, minYear+200],
+        connect: true,
+        tooltips: 
+            { to: (year) => year},
+        range: {
+            'min': minYear,
+            'max': maxYear
+        },
+        step: 10,
+        margin: 10
+    });
+
+    var timeValues = [
+        document.getElementById('timebar').noUiSlider.get()
+    ];
+
+    console.log("timevalues", timeValues)
+
+    timebar.noUiSlider.on("update", (values) => onTimebarUpdate(values, data))
+}
+
+function onTimebarUpdate(values, data) {
+    console.log("update timebar values", values)
+    // react to brushed event
+    // let selection = d3.brushSelection(d3.select(".timescale").node());
+    // console.log("selection", selection)
+    let lowerYear = values[0];
+    let upperYear = values[1];
+    for (let body of data) {
+        let x = body.discovery_year;
+        if (x >= values[0] && x <= values[1]) {
+            d3.select("#id" + body.name).style("fill", "red");
+        } else {
+            d3.select("#id" + body.name).style("fill", null);
+        }
     }
 }
