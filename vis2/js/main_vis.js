@@ -15,6 +15,7 @@ visSvg.append("circle")
 
 let tooltip = d3.select("body").append("div")
     .attr("id", "tree-vis-tooltip")
+    .style("opacity", 0)
     // .attr("class", "tree-vis-tooltip")
 
 // Box-Muller transform for normal distribution sampling
@@ -63,18 +64,18 @@ function drawVis(data, planetsOnly) {
         })
         .attr("cx", (p, i) => xScale(p.semi_major_axis) - 35)
         .attr("r", 8)
-        .on('mouseover', (event, d) => {
-            console.log("hovering over", d)
-            let discoveryDate = isNaN(d.discovery_year) ? 
-            "Known since antiquity" : `Discovered in ${d.discovery_year}`
+        .on('mouseover', (event, p) => {
+            console.log("hovering over", p)
+            let discoveryDate = isNaN(p.discovery_year) ? 
+            "Known since antiquity" : `Discovered in ${p.discovery_year}`
             tooltip
                 .style("opacity", 1)
                 .style("left", event.pageX + 20 + "px")
                 .style("top", event.pageY + "px")
                 .html(`
                     <div>
-                        <h3>${d.realName}</h3>
-                        <p class="${d.isDwarf ? "dwarf-text" : "planet-text"}">${d.isDwarf ? "Dwarf planet" : "Planet"}</p>
+                        <h3>${p.realName}</h3>
+                        <p class="${p.isDwarf ? "dwarf-text" : "planet-text"}">${p.isDwarf ? "Dwarf planet" : "Planet"}</p>
                         <p>${discoveryDate}</p>
                     </div>`);
         })
@@ -215,7 +216,34 @@ function drawVis(data, planetsOnly) {
         .attr("id", (m) => "id" + m.name)
         .attr("cy", (m) => m._moonY)
         .attr("cx", (m) => m._moonX)
-        .attr("r", 2)
+        .attr("r", 3)
+        .on('mouseover', function (event, m){
+            console.log("hovering over", m)
+            d3.select(this)
+                .attr("class", "highlighted-moon")
+            let discoveryDate = isNaN(m.discovery_year) ? 
+            "Known since antiquity" : `Discovered in ${m.discovery_year}`
+            tooltip
+                .style("opacity", 1)
+                .style("left", event.pageX + 20 + "px")
+                .style("top", event.pageY + "px")
+                .html(`
+                    <div>
+                        <h3>${m.realName}</h3>
+                        <p class="moon-text">Moon of ${m.orbits_planet}</p>
+                        <p>${discoveryDate}</p>
+                    </div>`);
+        })
+        .on('mouseout', function(event, m) {
+                d3.select(this)
+                    .attr("class", "moon")
+
+                tooltip
+                    .style("opacity", 0)
+                    .style("left", 0)
+                    .style("top", 0)
+                    .html(``);
+            })
 
     visSvg.selectAll("circle.moon").each(function(m) {
         const moonNode = this;
@@ -273,7 +301,7 @@ function onTimebarUpdate(values, data) {
     let upperYear = values[1];
     for (let body of data) {
         let x = body.discovery_year;
-        if (x >= values[0] && x <= values[1]) {
+        if (x >= lowerYear && x <= upperYear) {
             d3.select("#id" + body.name).style("fill", "red");
         } else {
             d3.select("#id" + body.name).style("fill", null);

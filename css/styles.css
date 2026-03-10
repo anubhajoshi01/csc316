@@ -409,6 +409,13 @@ button.navBtn {
   font-weight: 300;
   margin: 4px;
 }
+
+#tree-vis-tooltip span {
+  font-size: 14px;
+  font-weight: 300;
+  margin: 4px;
+}
+
 #tree-vis-tooltip .planet-text {
   color: #b8fff9;
 }
@@ -417,13 +424,17 @@ button.navBtn {
   color: #c4b5fd;
 }
 
+#tree-vis-tooltip .moon-text {
+  color: #f6bdee;
+}
+
 #tree-vis-tooltip h3 {
   font-size: 14px;
   font-weight: 700;
   color: #c8eeff;
   margin-top: 3px;
   margin-bottom: 6px;
-  margin-left: 2px;
+  margin-left: 3px;
 }
 
 /* Planet subclasses */
@@ -455,10 +466,17 @@ button.navBtn {
 /* ========================= */
 
 #chart-area .moon {
-    fill: #cccccc;
+    fill: #94b0c4;
     opacity: 0.6;
     stroke: rgba(255, 255, 255, 0.2);
-    stroke-width: 0.5px;
+    stroke-width: 4px;
+}
+
+#chart-area .highlighted-moon {
+    fill: #ebfbff;
+    opacity: 1;
+    stroke: rgb(158, 245, 255);
+    stroke-width: 3px;
 }
 
 /* ========================= */
