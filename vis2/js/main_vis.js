@@ -13,6 +13,10 @@ visSvg.append("circle")
     .attr("cy", HEIGHT / 2)
     .attr("cx", 40);
 
+let tooltip = d3.select("body").append("div")
+    .attr("id", "tree-vis-tooltip")
+    // .attr("class", "tree-vis-tooltip")
+
 // Box-Muller transform for normal distribution sampling
 function normalRandom(mean = 0, stdDev = 1) {
     let u = 0, v = 0;
@@ -23,11 +27,9 @@ function normalRandom(mean = 0, stdDev = 1) {
 }
 
 function drawVis(data, planetsOnly) {
-    console.log("the data", data);
     
     // filter planets
     let planetsData = data.filter((body) => body.is_planet)
-    console.log("planets only", planetsData)
 
     // count moons of planets
     planetsData.forEach(planet => {
@@ -61,6 +63,32 @@ function drawVis(data, planetsOnly) {
         })
         .attr("cx", (p, i) => xScale(p.semi_major_axis) - 35)
         .attr("r", 8)
+        .on('mouseover', (event, d) => {
+            console.log("hovering over", d)
+            let discoveryDate = isNaN(d.discovery_year) ? 
+            "Known since antiquity" : `Discovered in ${d.discovery_year}`
+            tooltip
+                .style("opacity", 1)
+                .style("left", event.pageX + 20 + "px")
+                .style("top", event.pageY + "px")
+                .html(`
+                    <div>
+                        <h3>${d.realName}</h3>
+                        <p class="${d.isDwarf ? "dwarf-text" : "planet-text"}">${d.isDwarf ? "Dwarf planet" : "Planet"}</p>
+                        <p>${discoveryDate}</p>
+                    </div>`);
+        })
+        .on('mouseout', (event, d) => {
+                // d3.select(this)
+                //     .attr('stroke-width', '0px')
+                //     .attr("fill", d => d.data.color)
+
+                tooltip
+                    .style("opacity", 0)
+                    .style("left", 0)
+                    .style("top", 0)
+                    .html(``);
+            })
 
     // Sun -> planets
     const SUN_X = 40;
@@ -223,7 +251,8 @@ function drawVis(data, planetsOnly) {
             'min': minYear,
             'max': maxYear
         },
-        step: 10
+        step: 10,
+        margin: 10
     });
 
     var timeValues = [
