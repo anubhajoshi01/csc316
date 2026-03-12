@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transition</title>
+
+  <!-- Replace this href with the exact same shared CSS file used by your other pages -->
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body class="transition-body">
+
+<section class="vis2 transition-page" id="transitionPage" aria-label="Transition to next visualization">
+  <div class="wrap transition-wrap">
+    <div class="panel transition-panel">
+      <p class="transition-message" id="transitionMessage">
+        Have you noticed how large and heavy Neptune is?
+        Even so, it was not discovered until scientists understood
+        <span class="gravity-highlight">gravity</span>.
+      </p>
+
+      <p class="transition-hint" id="transitionHint">
+        Click anywhere to check out how gravity acts on different planets!
+      </p>
+
+      <noscript>
+        <p class="transition-hint transition-hint-static">
+          <a href="../vis3/index.html">Continue to the next visualization</a>
+        </p>
+      </noscript>
+    </div>
+  </div>
+</section>
+
+<script src="js/transition.js"></script>
+</body>
+</html>
