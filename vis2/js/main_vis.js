@@ -234,16 +234,16 @@ function drawVis(data, planetsOnly) {
 
     noUiSlider.cssClasses.target += '-timebar';
     noUiSlider.create(timebar, {
-        start: [minYear+100, minYear+200],
-        connect: true,
+        start: [minYear-10],
+        connect: [true, false],
         tooltips: 
-            { to: (year) => year === minYear - 10 ? "Antiquity": year},
+            { to: (year) => year <= minYear - 10 ? "Antiquity": `${year} - ${year + 10}`},
         range: {
             'min': minYear - 10,
-            'max': maxYear
+            'max': maxYear - 10
         },
-        step: 10,
-        margin: 10
+        step: 1,
+        // margin: 10
     });
 
     var timeValues = [
@@ -259,45 +259,88 @@ function onTimebarUpdate(values, data) {
     // for debugging
     console.log("update timebar values", values)
 
-    let lowerYear = values[0];
-    let upperYear = values[1];
+    let lowerYear = Number(values[0]);
+    let upperYear = lowerYear > 1600 ? Number(values[0]) + 10 : 1609;
+    console.log(lowerYear, upperYear)
+    const transitionDuration = 50
     
     for (let body of data) {
         let x = body.discovery_year;
         let isSaturn = body.name === "Saturn"
 
-        if (x >= lowerYear && x <= upperYear) {
+        // antiquity condition -- highlight antiquity planets if antiquity is selected
+        if (isNaN(x) && (lowerYear < d3.min(data, (d) => d.discovery_year))) {
             d3.select("#id" + body.name)
-                .style("opacity", 1)
-                .style("fill-opacity", 1)
-            d3.select("#link-" + body.name).style("opacity", null)
-            d3.select("#label-" + body.name)
-                .style("opacity", 1)
-        } 
-        // antiquity condition
-        else if (isNaN(x) && (lowerYear < d3.min(data, (d) => d.discovery_year))) {
-            d3.select("#id" + body.name)
+                .transition()
+                .duration(transitionDuration)
                 .style("opacity", 1)
                 .style("fill-opacity", 1);
-            d3.select("#link-" + body.name).style("opacity", null)
+            d3.select("#link-" + body.name)
+                .transition()
+                .duration(transitionDuration)
+                .style("opacity", 0.7)
+                .style("stroke", null)
+            d3.select("#label-" + body.name)
+                .transition()
+                .duration(transitionDuration)
+                .style("opacity", 1)
             // d3.select("#id" + body.name).style("fill", null);
             if (isSaturn) {d3.select("#saturn-ring").style("opacity", null)}
         }
-        // hide planets that are not discovered yet
-        else if (x > upperYear) {
+        // highlight planets in the range
+        else if (x >= lowerYear && x <= upperYear) {
             d3.select("#id" + body.name)
+                .transition()
+                .duration(transitionDuration)
+                .style("opacity", 1)
+                .style("fill-opacity", 1)
+            d3.select("#link-" + body.name)
+                .transition()
+                .duration(transitionDuration)
+                .style("opacity", 0.7)
+                .style("stroke", null)
+            d3.select("#label-" + body.name)
+                .transition()
+                .duration(transitionDuration)
+                .style("opacity", 1)
+        } 
+
+        // hide planets that are not discovered yet
+        else if (x >= upperYear) {
+            console.log("above", body.name)
+            d3.select("#id" + body.name)
+                .transition()
+                .duration(transitionDuration)
                 .style("opacity", 0)
                 .style("stroke-width", 0)
             d3.select("#label-" + body.name)
+                .transition()
+                .duration(transitionDuration)
                 .style("opacity", 0)
-            d3.select("#link-" + body.name).style("opacity", 0)
+            d3.select("#link-" + body.name)
+                .transition()
+                .duration(transitionDuration)
+                .style("opacity", 0)
         }
+
         // planets discovered before time range, show them but with reduced opacity
         else if (isNaN(x) || x < lowerYear) {
+            console.log("below", body.name)
             d3.select("#id" + body.name)
+                .transition()
+                .duration(transitionDuration)
                 .style("fill-opacity", 0.3)
+                .style("opacity", 1)
                 .style("stroke-width", null)
-            d3.select("#link-" + body.name).style("opacity", 0.3)
+            d3.select("#link-" + body.name)
+                .transition()
+                .duration(transitionDuration)
+                .style("stroke", "#2d3648")
+                .style("opacity", 1)
+            d3.select("#label-" + body.name)
+                .transition()
+                .duration(transitionDuration)
+                .style("opacity", 0.5)
             if (isSaturn) {d3.select("#saturn-ring").style("opacity", 0.5)}
         }
     }
