@@ -53,8 +53,22 @@ function drawVis(data, planetsOnly) {
 
     // some manual adjustments to spread out the planets a bit more    
     let planetShifts = {'Mercury': -40, 'Venus': 150, 'Earth': -120, 'Mars': 75, 'Uranus': 35, '136472-Makemake': -20, '136199-Eris': -15}
+    
+    planets.enter()
+        .append("circle")
+        .attr("class", p => `planet ${p.name.toLowerCase()}`)
+        .attr("cy", (p, i) => {     // spread out the planets idk
+            let yval = i % 2 == 0 ? -i : i
+            let ypos = (p.semi_major_axis) + HEIGHT / 2 + yval * 20 * Math.min(p.semi_major_axis, 1) + (planetShifts[p.name] || 0)
+            return ypos
+        })
+        .attr("cx", (p, i) => xScale(p.semi_major_axis) - 35)
+        .attr("r", 8)
+        .style("fill", "black")
+        .style("stroke", "black")
 
-    planets.enter().append("circle")
+    planets.enter()
+        .append("circle")
         .attr("class", p => `planet ${p.name.toLowerCase()}`)
         .attr("id", (p) => "id" + p.name)
         .attr("cy", (p, i) => {     // spread out the planets idk
@@ -98,6 +112,7 @@ function drawVis(data, planetsOnly) {
     visSvg.selectAll(".planet-link")
         .data(planetsData)
         .enter().append("line")
+        .attr("id", (p) => "link-" + p.name)
         .attr("class", "planet-link")
         .attr("x1", SUN_X)
         .attr("y1", SUN_Y)
@@ -109,6 +124,7 @@ function drawVis(data, planetsOnly) {
     const saturn = d3.select("#idSaturn");
 
     visSvg.insert("ellipse", "#idSaturn")
+        .attr("id", "saturn-ring")
         .attr("class", "saturn-ring")
         .attr("cx", saturn.attr("cx"))
         .attr("cy", saturn.attr("cy"))
@@ -123,6 +139,7 @@ function drawVis(data, planetsOnly) {
     let moonlessPlanets = planetsData.filter(p => p.moon_count === 0).map(p => p.name);
 
     planetLabels.enter().append("text")
+        .attr("id", (p) => "label-" + p.name)
         .text((p) => p.realName)
         .attr("class", "planet-label-small")
         .attr("text-anchor", (p) => moonlessPlanets.includes(p.name) ? "start" : "end")
@@ -248,11 +265,13 @@ function drawVis(data, planetsOnly) {
     visSvg.selectAll("circle.moon").each(function(m) {
         const moonNode = this;
         const moon = d3.select(moonNode);
+        const moonName = m.name;
 
         const host = visSvg.select("#id" + m.orbits_planet);
         if (host.empty()) return;
 
         visSvg.insert("line", () => moonNode)
+            .attr("id", (m) => "link-" + moonName)
             .attr("class", "moon-link")
             .attr("x1", +host.attr("cx"))
             .attr("y1", +host.attr("cy"))
@@ -274,9 +293,9 @@ function drawVis(data, planetsOnly) {
         start: [minYear+100, minYear+200],
         connect: true,
         tooltips: 
-            { to: (year) => year},
+            { to: (year) => year === minYear - 10 ? "Antiquity": year},
         range: {
-            'min': minYear,
+            'min': minYear - 10,
             'max': maxYear
         },
         step: 10,
@@ -293,18 +312,49 @@ function drawVis(data, planetsOnly) {
 }
 
 function onTimebarUpdate(values, data) {
+    // for debugging
     console.log("update timebar values", values)
-    // react to brushed event
-    // let selection = d3.brushSelection(d3.select(".timescale").node());
-    // console.log("selection", selection)
+
     let lowerYear = values[0];
     let upperYear = values[1];
+    
     for (let body of data) {
         let x = body.discovery_year;
+        let isSaturn = body.name === "Saturn"
+
         if (x >= lowerYear && x <= upperYear) {
-            d3.select("#id" + body.name).style("fill", "red");
-        } else {
-            d3.select("#id" + body.name).style("fill", null);
+            d3.select("#id" + body.name)
+                .style("opacity", 1)
+                .style("fill-opacity", 1)
+            d3.select("#link-" + body.name).style("opacity", null)
+            d3.select("#label-" + body.name)
+                .style("opacity", 1)
+        } 
+        // antiquity condition
+        else if (isNaN(x) && (lowerYear < d3.min(data, (d) => d.discovery_year))) {
+            d3.select("#id" + body.name)
+                .style("opacity", 1)
+                .style("fill-opacity", 1);
+            d3.select("#link-" + body.name).style("opacity", null)
+            // d3.select("#id" + body.name).style("fill", null);
+            if (isSaturn) {d3.select("#saturn-ring").style("opacity", null)}
+        }
+        // hide planets that are not discovered yet
+        else if (x > upperYear) {
+            d3.select("#id" + body.name)
+                .style("opacity", 0)
+                .style("stroke-width", 0)
+            d3.select("#label-" + body.name)
+                .style("opacity", 0)
+            d3.select("#link-" + body.name).style("opacity", 0)
+        }
+        // planets discovered before time range, show them but with reduced opacity
+        else if (isNaN(x) || x < lowerYear) {
+            d3.select("#id" + body.name)
+                .style("fill-opacity", 0.3)
+                .style("stroke-width", null)
+            d3.select("#link-" + body.name).style("opacity", 0.3)
+            if (isSaturn) {d3.select("#saturn-ring").style("opacity", 0.5)}
         }
     }
 }
