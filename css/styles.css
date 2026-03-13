@@ -468,17 +468,17 @@ button.navBtn {
 /* ========================= */
 
 #chart-area .moon {
-    fill: #94b0c4;
+    fill: #c1dff4;
     opacity: 0.6;
-    stroke: rgba(255, 255, 255, 0.2);
-    stroke-width: 4px;
+    stroke: rgba(11, 15, 17, 0.2);
+    stroke-width: 1px;
 }
 
 #chart-area .highlighted-moon {
     fill: #ebfbff;
     opacity: 1;
     stroke: rgb(158, 245, 255);
-    stroke-width: 3px;
+    stroke-width: 1px;
 }
 
 /* ========================= */
