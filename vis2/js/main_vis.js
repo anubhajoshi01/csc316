@@ -18,6 +18,11 @@ let tooltip = d3.select("body").append("div")
     .style("opacity", 0)
 // .attr("class", "tree-vis-tooltip")
 
+function sqDist(x1, y1, x2, y2) {
+    const dx = x1 - x2, dy = y1 - y2;
+    return dx * dx + dy * dy;
+}
+
 // Box-Muller transform for normal distribution sampling
 function normalRandom(mean = 0, stdDev = 1) {
     let u = 0, v = 0;
@@ -146,6 +151,7 @@ function drawVis(data, planetsOnly) {
 
     // build moon-free safe zones around every planet and its label
     const PLANET_SAFE_RADIUS = 30;
+    const MOON_SAFE_RADIUS = 8;
     const LABEL_PADDING = 4;
 
     // for planets
@@ -204,34 +210,59 @@ function drawVis(data, planetsOnly) {
         && planetList.includes(body.orbits_planet))
     console.log("the moons", moonsData)
 
-    let moons = visSvg.selectAll("moons")
-        .data(moonsData)
-
     // Precompute moon positions with rejection sampling to avoid safe zones
     const MAX_PLACEMENT_TRIES = 100;
     moonsData.forEach(m => {
         const hostX = +d3.select("#id" + m.orbits_planet).attr("cx");
         const hostY = +d3.select("#id" + m.orbits_planet).attr("cy");
         const hostPlanet = data.find(d => d.name === m.orbits_planet);
-        const distanceScale = hostPlanet.moon_count * 0.3 + 10;
+        const distanceScale = hostPlanet.moon_count * 0.35 + 10;
         let x, y, tries = 0;
         do {
             const yOffset = normalRandom(0, distanceScale);
-            const xOffset = normalRandom(hostPlanet.moon_count + 30, hostPlanet.moon_count * 0.4 + 10);
+            const xOffset = normalRandom(hostPlanet.moon_count + 30, hostPlanet.moon_count * 0.35 + 10);
             x = hostX + xOffset;
             y = hostY + yOffset;
             tries++;
         } while (isInAnySafeZone(x, y) && tries < MAX_PLACEMENT_TRIES);
         m._moonX = x;
         m._moonY = y;
+        // register the placed moon as a safe zone so later moons avoid it
+        circleZones.push({ cx: x, cy: y, r: MOON_SAFE_RADIUS });
     });
+
+    // Reassign positions within each planet group so the moon with the smallest
+    // semi_major_axis gets the closest placed position, and so on.
+    const byPlanet = d3.group(moonsData, m => m.orbits_planet);
+    byPlanet.forEach((group, planet) => {
+        const hostEl = d3.select("#id" + planet);
+        const hx = +hostEl.attr("cx"), hy = +hostEl.attr("cy");
+
+        // placed positions sorted closest-first
+        const posSorted = [...group]
+            .sort((a, b) => sqDist(a._moonX, a._moonY, hx, hy) - sqDist(b._moonX, b._moonY, hx, hy))
+            .map(m => ({ x: m._moonX, y: m._moonY }));
+
+        // moons sorted by orbital distance (semi_major_axis) closest-first
+        const moonsSorted = [...group]
+            .sort((a, b) => a.semi_major_axis - b.semi_major_axis);
+
+        // assign: ith-closest orbit gets ith-closest placed position
+        moonsSorted.forEach((m, i) => {
+            m._moonX = posSorted[i].x;
+            m._moonY = posSorted[i].y;
+        });
+    });
+
+    let moons = visSvg.selectAll("moons")
+        .data(moonsData)
 
     moons.enter().append("circle")
         .attr("class", "moon")
         .attr("id", (m) => "id" + m.name)
         .attr("cy", (m) => m._moonY)
         .attr("cx", (m) => m._moonX)
-        .attr("r", 3)
+        .attr("r", 4)
         .on('mouseover', function (event, m) {
             console.log("hovering over", m)
             if (d3.select(this).style("opacity") != 0) {
