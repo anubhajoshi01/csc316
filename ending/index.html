@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ending</title>
+
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body class="transition-body ending-body">
+
+<section class="vis2 transition-page ending-page" id="endingPage" aria-label="Ending page">
+  <div class="wrap transition-wrap ending-wrap">
+
+    <div class="transition-stars" aria-hidden="true">
+      <span class="star star-1"></span>
+      <span class="star star-2"></span>
+      <span class="star star-3"></span>
+      <span class="star star-4"></span>
+      <span class="star star-5"></span>
+      <span class="star star-6"></span>
+    </div>
+
+    <img
+            src="img/telescope.png"
+            alt=""
+            class="ending-telescope"
+            aria-hidden="true"
+    />
+
+    <div class="ending-stage" aria-live="polite">
+      <p class="ending-line" id="line1">
+        We once thought the solar system was fully mapped.
+      </p>
+
+      <p class="ending-line" id="line2">
+        But in August 2025, astronomers using NASA’s James Webb Space Telescope
+        identified a new moon of Uranus
+        <span class="ending-highlight">S/2025 U1</span>.
+      </p>
+
+      <p class="ending-line" id="line3">
+        Even now, there is more to discover!
+      </p>
+    </div>
+
+    <p class="transition-hint ending-hint" id="endingHint">
+      Click anywhere
+    </p>
+
+    <noscript>
+      <p class="transition-hint transition-hint-static ending-noscript">
+        <a href="../vis1/index.html">Continue</a>
+      </p>
+    </noscript>
+
+  </div>
+</section>
+
+<script src="js/ending.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transition</title>
+
+  <!-- keep your real shared css filename here -->
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body class="transition-body">
+
+<section class="vis2 transition-page" id="transitionPage" aria-label="Transition to next visualization">
+  <div class="wrap transition-wrap">
+    <div class="panel transition-panel">
+
+      <div class="transition-stars" aria-hidden="true">
+        <span class="star star-1"></span>
+        <span class="star star-2"></span>
+        <span class="star star-3"></span>
+        <span class="star star-4"></span>
+        <span class="star star-5"></span>
+        <span class="star star-6"></span>
+      </div>
+
+      <div class="transition-content">
+        <div class="transition-copy">
+          <p class="transition-message" id="transitionMessage">
+            Have you noticed how large and heavy Neptune is?
+            Even so, it was not discovered until scientists understood
+            <span class="gravity-highlight">gravity</span>.
+          </p>
+
+          <div class="transition-visual" aria-hidden="true">
+            <div class="neptune-scene">
+              <div class="orbit orbit-1"></div>
+              <div class="orbit orbit-2"></div>
+              <div class="orbit orbit-3"></div>
+
+              <div class="neptune-glow"></div>
+              <div class="neptune-core"></div>
+            </div>
+          </div>
+
+          <p class="transition-hint" id="transitionHint">
+            Click anywhere to continue
+          </p>
+
+          <noscript>
+            <p class="transition-hint transition-hint-static">
+              <a href="../vis3/index.html">Continue to the next visualization</a>
+            </p>
+          </noscript>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script src="js/transition.js"></script>
+</body>
+</html>
