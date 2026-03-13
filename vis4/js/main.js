@@ -124,7 +124,31 @@ function drawOrbitingBodies(group, panel, centralBody, orbiters) {
             .attr("cy", centerY)
             .attr("r", radiusScale(obj.meanRadius))
             .attr("fill", colorScale(obj.eName))
-            .attr("stroke", "#333");
+            .attr("stroke", "#333")
+            .attr("class", "orbiter")
+            .on("mouseover", function(event) {
+                const tooltip = d3.select("#tooltip");
+
+                tooltip.style("display", "block", )
+                    .html(`
+                        <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 4px; color: #ffdd33;">
+                            ${obj.eName}
+                        </div>
+                        <div style="border-top: 1px solid rgba(255,255,255,0.2); margin-bottom: 4px;"></div>
+                        Orbits: ${obj.orbits}<br/>
+                        Eccentricity: ${obj.eccentricity}<br/>
+                        Mean Radius: ${obj.meanRadius.toLocaleString()} km<br/>
+                        Discovery Date: ${obj.discoveryDate}
+                    `);
+            })
+            .on("mousemove", function(event) {
+                d3.select("#tooltip")
+                    .style("left", (event.pageX - 550) + "px")
+                    .style("top", (event.pageY - 150) + "px");
+            })
+            .on("mouseout", function() {
+                d3.select("#tooltip").style("display", "none");
+            });
 
         // Draw central body once
         if (i === 0) {
