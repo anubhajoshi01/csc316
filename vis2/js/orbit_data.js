@@ -20,6 +20,8 @@ function orbitData(csvPath, discardNonPlanets = true) {
             orbit_type: d.orbit_type,
             discovery_year: d.discoveryDate,
             is_planet: d.isPlanet === "TRUE",
+            isDwarf: d.isPlanet === "TRUE" && 
+            !["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"].includes(d.eName),
             radius: +d.meanRadius,
             mass: +d.mass_kg,
             semi_major_axis: +d.semimajorAxis / 149597870       // in astronomical units
