@@ -1,7 +1,7 @@
 // ==========================
 // Constants & Dimensions
 // ==========================
-const width = 1100;
+const width = 1150;
 const height = 800;
 const panelWidth = 800 / 2;
 const panelHeight = height / 2;
@@ -186,7 +186,8 @@ function drawOrbitingBodies(group, panel, centralBody, orbiters) {
 function createLegend(svg, mostEccentric) {
 
     const legend = svg.append("g")
-        .attr("transform", `translate(900,60)`);
+        .attr("transform", `translate(870,60)`)
+        .attr("id", "legend");
 
     legend.append("text")
         .text("Orbiting Bodies")
@@ -225,6 +226,7 @@ d3.csv("data/sol_data.csv").then(data => {
     data.forEach(d => {
         d.eccentricity = +d.eccentricity;
         d.meanRadius = +d.meanRadius;
+        d.discoveryDate = formatSpaceDate(d.discoveryDate);
     });
 
     data.sort((a,b) => b.eccentricity - a.eccentricity);
@@ -269,6 +271,27 @@ d3.csv("data/sol_data.csv").then(data => {
 
     createLegend(svg, mostEccentric);
 });
+
+function formatSpaceDate(dateStr) {
+    if (!dateStr || dateStr === "NA") return "NA";
+
+    // Split "29/4/1998" into [29, 4, 1998]
+    const parts = dateStr.split("/");
+    if (parts.length !== 3) return dateStr;
+
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1; // Months are 0-indexed (0 = Jan)
+    const year = parseInt(parts[2], 10);
+
+    const dateObj = new Date(year, month, day);
+
+    // Format to "April 29, 1998"
+    return dateObj.toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+    });
+}
 
 
 // ==========================
