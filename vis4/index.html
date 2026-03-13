@@ -12,14 +12,19 @@
 
 <body>
   <h1 class="title">Which bodies have the least circular orbits?</h1>
+  <p id="description">The <strong>eccentricity</strong> of an orbit is a number that measures how "un-circular" the orbit is.</p>
   <p id="description">Earth's orbit has a low eccentricity, which means it is nearly circular. This is included as a point of comparison.</p>
 
   <div style="position: relative; width: 1100px; margin: 0 auto;">
+    <div id="tooltip"></div>
     <div id="vis4"></div>
     
-    <div class="controls-side" style="position: absolute; top: 350px; right: 10px;">
+    <div class="controls-side" style="position: absolute; top: 400px; right: 0px;">
       <button id="orbit-toggle" >
         Start Orbits
+      </button>
+      <button id="reset-btn" disabled>
+        Reset Orbits
       </button>
 
       <div class="slider-container">
