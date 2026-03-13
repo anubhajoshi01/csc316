@@ -1,7 +1,26 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
+    <meta charset="utf-8">
+
+    <title>Vis 1</title>
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- <style>
+    body {
+      font-family: sans-serif;
+      background: black;
+    }
+    text {
+      pointer-events: none;
+      fill: white;
+      font-weight: 600;
+    }
+    .title {
+      color: white;
+      text-align: center;
+      margin-top: 20px;
+    }
 
   <title>Vis 1</title>
   <link rel="stylesheet" href="../css/styles.css" />
@@ -10,19 +29,19 @@
 
 <body>
 
-<div class="vis1-container" style="text-align: center;">
-  <h1 class="title">Bigger solar system objects were discovered first!</h1>
-  <h3 class="title">We first discovered things we could see with the naked eye - planets large in mass and volume</h3>
-  <button id="resetButton" aria-label="Reset visualization"></button>
-  <svg id="viz" width="600" height="600"></svg>
-  <script src="js/complete1.js"></script>
+<div class="vis1-container">
+    <h1 class="title">Bigger solar system objects were discovered first!</h1>
+    <h3 class="title">We first discovered things we could see with the naked eye - planets large in mass and volume</h3>
+    <!-- Completed: d3 included -->
+    <button id="resetButton" aria-label="Reset visualization"></button>
+    <svg id="viz"></svg>
+
+    <script src="js/complete1.js"></script>
 </div>
 
-<div class="vis2-container" style="margin-top: 50px; text-align: center;">
-  <h3>Timeline of discoveries</h2>
-  <svg id="timelineSvg" width="800" height="200"></svg>
-</div>
-
+<h4>
+    First we just noticed big stars and planets, then we started asking questions.
+</h4>
 <h4>
   First we just noticed big stars and planets, then we started asking questions.
 </h4>
@@ -31,9 +50,9 @@
 </h4>
 
 <div style="text-align:center; margin:20px 0;">
-  <button onclick="window.location.href='../vis3/index.html'" class="navBtn">
-    Check out how gravity acts on different planets!
-  </button>
+    <button onclick="window.location.href='../vis3/index.html'" class="navBtn">
+        Check out how gravity acts on different planets!
+    </button>
 </div>
 
 </body>
