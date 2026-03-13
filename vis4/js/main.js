@@ -1,7 +1,7 @@
 // ==========================
 // Constants & Dimensions
 // ==========================
-const width = 1100;
+const width = 1150;
 const height = 800;
 const panelWidth = 800 / 2;
 const panelHeight = height / 2;
@@ -124,7 +124,31 @@ function drawOrbitingBodies(group, panel, centralBody, orbiters) {
             .attr("cy", centerY)
             .attr("r", radiusScale(obj.meanRadius))
             .attr("fill", colorScale(obj.eName))
-            .attr("stroke", "#333");
+            .attr("stroke", "#333")
+            .attr("class", "orbiter")
+            .on("mouseover", function(event) {
+                const tooltip = d3.select("#tooltip");
+
+                tooltip.style("display", "block", )
+                    .html(`
+                        <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 4px; color: #ffdd33;">
+                            ${obj.eName}
+                        </div>
+                        <div style="border-top: 1px solid rgba(255,255,255,0.2); margin-bottom: 4px;"></div>
+                        Orbits: ${obj.orbits}<br/>
+                        Eccentricity: ${obj.eccentricity}<br/>
+                        Mean Radius: ${obj.meanRadius.toLocaleString()} km<br/>
+                        Discovery Date: ${obj.discoveryDate}
+                    `);
+            })
+            .on("mousemove", function(event) {
+                d3.select("#tooltip")
+                    .style("left", (event.pageX - 550) + "px")
+                    .style("top", (event.pageY - 150) + "px");
+            })
+            .on("mouseout", function() {
+                d3.select("#tooltip").style("display", "none");
+            });
 
         // Draw central body once
         if (i === 0) {
@@ -135,18 +159,21 @@ function drawOrbitingBodies(group, panel, centralBody, orbiters) {
         // Animation
         // ======================
         const baseSpeed = 0.001 / (Math.sqrt(a) * 0.2);
-        let currentAngle = 0;
+        const state = { angle: 0 };
 
         animationTasks.push((elapsed, deltaTime) => {
+            if (deltaTime === 0) {
+                state.angle = 0;
+            }
 
-            const r = (a * (1 - e ** 2)) / (1 + e * Math.cos(currentAngle));
+            const r = (a * (1 - e ** 2)) / (1 + e * Math.cos(state.angle));
             const angularVelocity = baseSpeed / ((a ** 2) / (r ** 2)) * speedMultiplier;
 
-            currentAngle += angularVelocity * (deltaTime || 16);
+            state.angle += angularVelocity * (deltaTime || 16);
 
             orbiter
-                .attr("cx", centerX + a * Math.cos(currentAngle))
-                .attr("cy", centerY + b * Math.sin(currentAngle));
+                .attr("cx", centerX + a * Math.cos(state.angle))
+                .attr("cy", centerY + b * Math.sin(state.angle));
         });
 
     });
@@ -159,7 +186,8 @@ function drawOrbitingBodies(group, panel, centralBody, orbiters) {
 function createLegend(svg, mostEccentric) {
 
     const legend = svg.append("g")
-        .attr("transform", `translate(900,60)`);
+        .attr("transform", `translate(870,60)`)
+        .attr("id", "legend");
 
     legend.append("text")
         .text("Orbiting Bodies")
@@ -198,6 +226,7 @@ d3.csv("data/sol_data.csv").then(data => {
     data.forEach(d => {
         d.eccentricity = +d.eccentricity;
         d.meanRadius = +d.meanRadius;
+        d.discoveryDate = formatSpaceDate(d.discoveryDate);
     });
 
     data.sort((a,b) => b.eccentricity - a.eccentricity);
@@ -243,6 +272,27 @@ d3.csv("data/sol_data.csv").then(data => {
     createLegend(svg, mostEccentric);
 });
 
+function formatSpaceDate(dateStr) {
+    if (!dateStr || dateStr === "NA") return "NA";
+
+    // Split "29/4/1998" into [29, 4, 1998]
+    const parts = dateStr.split("/");
+    if (parts.length !== 3) return dateStr;
+
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1; // Months are 0-indexed (0 = Jan)
+    const year = parseInt(parts[2], 10);
+
+    const dateObj = new Date(year, month, day);
+
+    // Format to "April 29, 1998"
+    return dateObj.toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+    });
+}
+
 
 // ==========================
 // Animation Toggle
@@ -254,7 +304,7 @@ d3.select("#orbit-toggle").on("click", function(){
 
     if(isAnimating){
 
-        btn.text("Stop Animation");
+        btn.text("Stop Orbits");
         lastTime = performance.now();
 
         mainTimer = d3.timer(()=>{
@@ -266,11 +316,27 @@ d3.select("#orbit-toggle").on("click", function(){
             animationTasks.forEach(task => task(now, deltaTime));
         });
 
+        d3.select("#reset-btn").property("disabled", false);
+
     } else {
 
-        btn.text("Start Animation");
+        btn.text("Start Orbits");
         if(mainTimer) mainTimer.stop();
     }
+});
+
+d3.select("#reset-btn").on("click", function(){
+
+    if (!isAnimating) return;
+    isAnimating = false;
+    d3.select("#orbit-toggle").text("Start Orbits");
+    if(mainTimer) mainTimer.stop();
+    // set all orbiters back to initial positions
+    animationTasks.forEach(task => task(0, 0));
+
+    //grey out button
+    d3.select(this).property("disabled", true);
+
 });
 
 
