@@ -366,6 +366,7 @@ button.navBtn {
   background: #bbfcf7;
   height: 6px;
   margin-top: 2px;
+  border-radius: 4px;
 }
 
 .noUi-handle::after, .noUi-handle::before {
@@ -384,24 +385,25 @@ button.navBtn {
 }
 
 #chart-area .planet {
-    stroke: grey;
+    stroke: rgb(130, 144, 154);
     stroke-width: 1px;
     opacity: 0.95;
     transform-box: fill-box;
     transform-origin: center;
     transform: scale(var(--scale, 1));
+    fill: #c2dbda;
 }
 
 /* Planet subclasses */
-#chart-area .planet.mercury { fill: #b7b7b7; --scale: 0.55; }
-#chart-area .planet.venus   { fill: #d7b36a; --scale: 0.90; }
-#chart-area .planet.earth   { fill: #4a90e2; --scale: 0.95; }
-#chart-area .planet.mars    { fill: #c65a3a; --scale: 0.70; }
+#chart-area .planet.mercury { fill: #b7b7b7; --scale: 0.55; stroke: #79878c }
+#chart-area .planet.venus   { fill: #d7b36a; --scale: 0.90; stroke: #c18b5c }
+#chart-area .planet.earth   { fill: #278fc7; --scale: 0.95; stroke: #1a79b4}
+#chart-area .planet.mars    { fill: #c65a3a; --scale: 0.70; stroke: #ae3b29}
 
-#chart-area .planet.jupiter { fill: #caa07a; --scale: 2.20; }
-#chart-area .planet.saturn  { fill: #e6d28a; --scale: 1.90; }
-#chart-area .planet.uranus  { fill: #76c7c0; --scale: 1.25; }
-#chart-area .planet.neptune { fill: #3b5bd6; --scale: 1.20; }
+#chart-area .planet.jupiter { fill: #caa07a; --scale: 2.20; stroke: #b27963}
+#chart-area .planet.saturn  { fill: #e6d28a; --scale: 1.90; stroke: #d7b17c}
+#chart-area .planet.uranus  { fill: #76c7c0; --scale: 1.25; stroke: #3cafb5}
+#chart-area .planet.neptune { fill: #3b5bd6; --scale: 1.20; stroke: #1540c0}
 
 #chart-area .planet.other   { fill: #777; --scale: 0.45; }
 
@@ -433,7 +435,7 @@ button.navBtn {
 
 #chart-area .saturn-ring {
     fill: none;
-    stroke: #c8be96;
+    stroke: #d7b17c;
     stroke-width: 3px;
 }
 
@@ -442,13 +444,13 @@ button.navBtn {
 /* ========================= */
 
 #chart-area .planet-link {
-    stroke: #888;
+    stroke: #c4f3ff;
     stroke-width: 1px;
     opacity: 0.6;
 }
 
 #chart-area .moon-link {
-    stroke: #aaa;
+    stroke: #c4f3ff;
     stroke-width: 0.7px;
     opacity: 0.35;
 }
