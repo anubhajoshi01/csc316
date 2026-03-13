@@ -4,8 +4,8 @@ const WIDTH = 1000;
 const HEIGHT = 700;
 
 let visSvg = d3.select("#chart-area").append("svg")
-			.attr("width", WIDTH)
-			.attr("height", HEIGHT);
+    .attr("width", WIDTH)
+    .attr("height", HEIGHT);
 
 visSvg.append("circle")
     .attr("class", "sun")
@@ -13,21 +13,24 @@ visSvg.append("circle")
     .attr("cy", HEIGHT / 2)
     .attr("cx", 40);
 
+let tooltip = d3.select("body").append("div")
+    .attr("id", "tree-vis-tooltip")
+    .style("opacity", 0)
+// .attr("class", "tree-vis-tooltip")
+
 // Box-Muller transform for normal distribution sampling
 function normalRandom(mean = 0, stdDev = 1) {
     let u = 0, v = 0;
-    while(u === 0) u = Math.random();
-    while(v === 0) v = Math.random();
+    while (u === 0) u = Math.random();
+    while (v === 0) v = Math.random();
     let normal = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
     return mean + stdDev * normal;
 }
 
 function drawVis(data, planetsOnly) {
-    console.log("the data", data);
-    
+
     // filter planets
     let planetsData = data.filter((body) => body.is_planet)
-    console.log("planets only", planetsData)
 
     // count moons of planets
     planetsData.forEach(planet => {
@@ -38,7 +41,7 @@ function drawVis(data, planetsOnly) {
     // Create a log scale for x-axis (planet distance from sun)
     let maxDistance = d3.max(planetsData, p => p.semi_major_axis);
     let minDistance = d3.min(planetsData, p => p.semi_major_axis);
-    
+
     let xScale = d3.scalePow()
         .exponent(0.7)
         .domain([minDistance, maxDistance])
@@ -49,8 +52,8 @@ function drawVis(data, planetsOnly) {
         .data(planetsData)
 
     // some manual adjustments to spread out the planets a bit more    
-    let planetShifts = {'Mercury': -40, 'Venus': 150, 'Earth': -120, 'Mars': 75, 'Uranus': 35, '136472-Makemake': -20, '136199-Eris': -15}
-    
+    let planetShifts = { 'Mercury': -40, 'Venus': 150, 'Earth': -120, 'Mars': 75, 'Uranus': 35, '136472-Makemake': -20, '136199-Eris': -15 }
+
     planets.enter()
         .append("circle")
         .attr("class", p => `planet ${p.name.toLowerCase()}`)
@@ -75,6 +78,30 @@ function drawVis(data, planetsOnly) {
         })
         .attr("cx", (p, i) => xScale(p.semi_major_axis) - 35)
         .attr("r", 8)
+        .on('mouseover', function (event, p) {
+            if (d3.select(this).style("opacity") != 0) {
+                let discoveryDate = isNaN(p.discovery_year) ?
+                    "Known since antiquity" : `Discovered in ${p.discovery_year}`
+                tooltip
+                    .style("opacity", 1)
+                    .style("left", event.pageX + 20 + "px")
+                    .style("top", event.pageY + "px")
+                    .html(`
+                    <div>
+                        <h3>${p.realName}</h3>
+                        <p class="${p.isDwarf ? "dwarf-text" : "planet-text"}">${p.isDwarf ? "Dwarf planet" : "Planet"}</p>
+                        <p>${discoveryDate}</p>
+                    </div>`);
+            }
+
+        })
+        .on('mouseout', function (event, d) {
+            tooltip
+                .style("opacity", 0)
+                .style("left", 0)
+                .style("top", 0)
+                .html(``);
+        })
 
     // Sun -> planets
     const SUN_X = 40;
@@ -102,7 +129,7 @@ function drawVis(data, planetsOnly) {
         .attr("rx", saturn.attr("r") * 3)
         .attr("ry", saturn.attr("r") * 1.5)
         .attr("transform", `rotate(-20 ${saturn.attr("cx")} ${saturn.attr("cy")})`);
-    
+
     // add some labels
     let planetLabels = visSvg.selectAll(".planet-label")
         .data(planetsData)
@@ -130,12 +157,12 @@ function drawVis(data, planetsOnly) {
 
     // for their labels
     const rectZones = [];
-    visSvg.selectAll(".planet-label").each(function() {
+    visSvg.selectAll(".planet-label").each(function () {
         const bbox = this.getBBox();
         rectZones.push({
             x: bbox.x - LABEL_PADDING,
             y: bbox.y - LABEL_PADDING,
-            w: bbox.width  + LABEL_PADDING * 2,
+            w: bbox.width + LABEL_PADDING * 2,
             h: bbox.height + LABEL_PADDING * 2
         });
     });
@@ -149,7 +176,7 @@ function drawVis(data, planetsOnly) {
         if (rectZones.some(z => x >= z.x && x <= z.x + z.w && y >= z.y && y <= z.y + z.h)) return true;
         return false;
     }
-    
+
     // some silly asteroids / comets -- non-planets with primary orbits
     // let asteroidData = data.filter((body) => !body.is_planet && body.orbit_type === "Primary")
     // console.log("asteroids etc", asteroidData)
@@ -167,13 +194,13 @@ function drawVis(data, planetsOnly) {
     //     })
     //     .attr("cx", (a, i) => (a.semi_major_axis * 16) + 70)
     //     .attr("r", 4)
-    
+
     // time to add the orbiting bodies. or whatever
     // dont want to include asteroids that orbit other asteroids (for now, we can talk about this)
-    let planetList = ["1-Ceres", "136199-Eris", "Uranus", "Pluto", "Neptune", "136108-Haumea", 
+    let planetList = ["1-Ceres", "136199-Eris", "Uranus", "Pluto", "Neptune", "136108-Haumea",
         "136472-Makemake", "Jupiter", "Mars", "Mercury", "Saturn", "Earth", "Venus"
     ]
-    let moonsData = data.filter((body) => !body.is_planet && body.orbit_type !== "Primary" 
+    let moonsData = data.filter((body) => !body.is_planet && body.orbit_type !== "Primary"
         && planetList.includes(body.orbits_planet))
     console.log("the moons", moonsData)
 
@@ -204,9 +231,38 @@ function drawVis(data, planetsOnly) {
         .attr("id", (m) => "id" + m.name)
         .attr("cy", (m) => m._moonY)
         .attr("cx", (m) => m._moonX)
-        .attr("r", 2)
+        .attr("r", 3)
+        .on('mouseover', function (event, m) {
+            console.log("hovering over", m)
+            if (d3.select(this).style("opacity") != 0) {
+                d3.select(this)
+                    .attr("class", "highlighted-moon")
+                let discoveryDate = isNaN(m.discovery_year) ?
+                    "Known since antiquity" : `Discovered in ${m.discovery_year}`
+                tooltip
+                    .style("opacity", 1)
+                    .style("left", event.pageX + 20 + "px")
+                    .style("top", event.pageY + "px")
+                    .html(`
+                    <div>
+                        <h3>${m.realName}</h3>
+                        <p class="moon-text">Moon of ${m.orbits_planet}</p>
+                        <p>${discoveryDate}</p>
+                    </div>`);
+            }
+        })
+        .on('mouseout', function (event, m) {
+            d3.select(this)
+                .attr("class", "moon")
 
-    visSvg.selectAll("circle.moon").each(function(m) {
+            tooltip
+                .style("opacity", 0)
+                .style("left", 0)
+                .style("top", 0)
+                .html(``);
+        })
+
+    visSvg.selectAll("circle.moon").each(function (m) {
         const moonNode = this;
         const moon = d3.select(moonNode);
         const moonName = m.name;
@@ -285,7 +341,7 @@ function onTimebarUpdate(values, data) {
                 .duration(transitionDuration)
                 .style("opacity", 1)
             // d3.select("#id" + body.name).style("fill", null);
-            if (isSaturn) {d3.select("#saturn-ring").style("opacity", null)}
+            if (isSaturn) { d3.select("#saturn-ring").style("opacity", null) }
         }
         // highlight planets in the range
         else if (x >= lowerYear && x <= upperYear) {
