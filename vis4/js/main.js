@@ -135,18 +135,21 @@ function drawOrbitingBodies(group, panel, centralBody, orbiters) {
         // Animation
         // ======================
         const baseSpeed = 0.001 / (Math.sqrt(a) * 0.2);
-        let currentAngle = 0;
+        const state = { angle: 0 };
 
         animationTasks.push((elapsed, deltaTime) => {
+            if (deltaTime === 0) {
+                state.angle = 0;
+            }
 
-            const r = (a * (1 - e ** 2)) / (1 + e * Math.cos(currentAngle));
+            const r = (a * (1 - e ** 2)) / (1 + e * Math.cos(state.angle));
             const angularVelocity = baseSpeed / ((a ** 2) / (r ** 2)) * speedMultiplier;
 
-            currentAngle += angularVelocity * (deltaTime || 16);
+            state.angle += angularVelocity * (deltaTime || 16);
 
             orbiter
-                .attr("cx", centerX + a * Math.cos(currentAngle))
-                .attr("cy", centerY + b * Math.sin(currentAngle));
+                .attr("cx", centerX + a * Math.cos(state.angle))
+                .attr("cy", centerY + b * Math.sin(state.angle));
         });
 
     });
@@ -254,7 +257,7 @@ d3.select("#orbit-toggle").on("click", function(){
 
     if(isAnimating){
 
-        btn.text("Stop Animation");
+        btn.text("Stop Orbits");
         lastTime = performance.now();
 
         mainTimer = d3.timer(()=>{
@@ -266,11 +269,27 @@ d3.select("#orbit-toggle").on("click", function(){
             animationTasks.forEach(task => task(now, deltaTime));
         });
 
+        d3.select("#reset-btn").property("disabled", false);
+
     } else {
 
-        btn.text("Start Animation");
+        btn.text("Start Orbits");
         if(mainTimer) mainTimer.stop();
     }
+});
+
+d3.select("#reset-btn").on("click", function(){
+
+    if (!isAnimating) return;
+    isAnimating = false;
+    d3.select("#orbit-toggle").text("Start Orbits");
+    if(mainTimer) mainTimer.stop();
+    // set all orbiters back to initial positions
+    animationTasks.forEach(task => task(0, 0));
+
+    //grey out button
+    d3.select(this).property("disabled", true);
+
 });
 
 

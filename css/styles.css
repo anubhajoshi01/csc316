@@ -423,7 +423,7 @@ button.navBtn {
     z-index: 1000;
 }
 
-#orbit-toggle {
+#orbit-toggle, #reset-btn {
     /* Position and Layout */
     display: block;
     margin: 20px auto;
@@ -447,11 +447,17 @@ button.navBtn {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-#orbit-toggle:hover {
+#orbit-toggle:hover, #reset-btn:hover {
     background: rgba(255, 255, 255, 0.15);
     border-color: #79c8ed; 
     box-shadow: 0 0 15px rgba(121, 200, 237, 0.4);
     transform: translateY(-1px);
+}
+
+#reset-btn:disabled {
+  opacity: 50%;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .slider-container {
