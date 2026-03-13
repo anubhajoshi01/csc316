@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <title>Scale</title>
 
-  <link rel="stylesheet" href="css/scale.css" />
+  <link rel="stylesheet" href="../css/styles.css" />
   <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 
@@ -13,33 +13,34 @@
 
   <section class="scale-page">
     <div class="wrap">
-      <h1>How Massive Is Each Planet Compared to Earth?</h1>
+      <h1>Earth is big, but space is bigger!</h1>
+      <h4>Use the scale to see how heavy other planets are compared to the Earth!</h4>
 
       <div class="panel">
         <div class="controls">
           <div class="field">
-            <label>Select a planet to compare with the Earth!</label>
+            <label>Select a planet</label>
             <div id="ddA" class="dropdown"></div>
           </div>
           <!-- <input id="num-bodies">
           <label>number of planets</label>
         </input> -->
-          <div>
+          <div class="scale-button-container">
             <p id="add-planet-text">Add Jupiters</p>
-            <button id="planet-1">+1</button>
-            <button id="planet-10">+10</button>
-            <button id="planet-100">+100</button>
+            <button class="add-planet" id="planet-1">+1</button>
+            <button class="add-planet" id="planet-10">+10</button>
+            <button class="add-planet" id="planet-100">+100</button>
           </div>
 
-          <div>
+          <div class="scale-button-container">
             <p id="add-earth-text">Add Earths</p>
-            <button id="earth-1">+1</button>
-            <button id="earth-10">+10</button>
-            <button id="earth-100">+100</button>
+            <button class="add-planet" id="earth-1">+1</button>
+            <button class="add-planet" id="earth-10">+10</button>
+            <button class="add-planet" id="earth-100">+100</button>
           </div>
 
-          <div>
-            <button id="clear-all-scale">Clear All</button>
+          <div class="scale-button-container">
+            <button class="clear-button" id="clear-all-scale">Clear All</button>
           </div>
           <!-- <input id="num-earths">
           <label>number of earths</label>

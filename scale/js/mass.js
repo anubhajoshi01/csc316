@@ -49,17 +49,10 @@ function getMass(d) {
 
 function isSelectablePlanet(d) {
     const name = normalizeName(getName(d));
-
+    console.log("name", name)
     if (name === "sun") return false;
 
     return (
-        d.isPlanet === true ||
-        d.isPlanet === "true" ||
-        d.isPlanet === "TRUE" ||
-        d.type === "planet" ||
-        d.category === "planet" ||
-        d.body_type === "planet" ||
-        d.kind === "planet" ||
         [
             "mercury",
             "venus",
@@ -68,7 +61,8 @@ function isSelectablePlanet(d) {
             "jupiter",
             "saturn",
             "uranus",
-            "neptune"
+            "neptune",
+            "pluto"
         ].includes(name)
     );
 }
@@ -170,7 +164,7 @@ function buildDropdown(items) {
                 numA = 1;
                 numB = 1;
                 d3.select("#add-planet-text")
-                    .text(`Add ${selectedA.eName}s`)
+                    .text(`Add ${selectedA.eName}${selectedA.eName.slice(-1) === 's' ? 'e' : ''}s`)
                 console.log("called function a", d)
                 menu.classed("open", false);
                 refreshButton();
@@ -464,8 +458,9 @@ function drawScale() {
             .attr("x", rightLabelAttrs.x)
             .attr("y", rightLabelAttrs.y);
     }
-
-    leftLabel.text(`${numA} ${getName(selectedA)}${numA > 1 ? 's': ''}`);
+    leftLabel.text(`${numA} ${getName(selectedA)}${
+        numA > 1 ? `${selectedA.eName.slice(-1) === 's' ? 'es' : 's'}`: ''
+    }`);
     rightLabel.text(`${numB} Earth${numB > 1 ? 's': ''}`);
 }
 

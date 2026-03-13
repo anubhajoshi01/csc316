@@ -92,6 +92,59 @@ button.navBtn {
   box-shadow: 0 6px 20px rgba(0,255,255,0.5);
 }
 
+/* add planets buttons */
+button.add-planet {
+  background: #000;
+  color: #cde1ff;
+  border: 2px solid #cde1ff;
+  font-size: 12px;
+  font-weight: 700;
+  width: 50px;
+  height: 30px;
+  padding: 0px 0px;
+  border-radius: 30px;
+  cursor: pointer;
+  text-shadow: 0 0 6px rgba(205,225,255,0.6),
+               0 0 12px rgba(118,199,192,0.3);
+  transition: all 0.3s ease;
+}
+
+.add-planet:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(74, 134, 255, 0.5);
+  background: #1f1a50
+
+}
+
+/* clear buttons */
+.clear-button {
+  background: #000;
+  color: #dbd2ff;
+  border: 2px solid #c4b5fd;
+  padding: 14px 20px;
+  font-size: 12px;
+  margin-left: 20px;
+  margin-bottom: -5px;
+  font-weight: 700;
+  border-radius: 30px;
+  cursor: pointer;
+  text-shadow: 0 0 6px rgba(205,225,255,0.6),
+               0 0 12px rgba(118,199,192,0.3);
+  transition: all 0.3s ease;
+}
+
+.clear-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(125, 74, 255, 0.722);
+  background:#4515c06b;
+}
+
+/* Regular planet labels */
+.scale-button-container {
+  margin-left: 30px;
+}
+
+
 /* Regular planet labels */
 .planet-label {
   font-weight: 600;
@@ -147,6 +200,174 @@ button.navBtn {
 /* ================================================= */
 /* ================= VIS 1 + VIS 2 LAYOUT ========== */
 /* ================================================= */
+
+/* ================== SCALE STUFF ===================*/
+
+.scale-page {
+    min-height: 100vh;
+    background: #000000;
+    color: #e8e8f0;
+}
+
+.scale-page .wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 40px 20px 20px;
+}
+
+.scale-page h1 {
+    font-family: 'Orbitron', 'Roboto', sans-serif;
+    color: #cde1ff;
+    letter-spacing: 0.6px;
+    font-weight: 600;
+    text-align: center;
+    margin: 0 0 20px 0;
+}
+
+.scale-page .panel {
+    background: var(--panel);
+    border: 1px solid var(--stroke);
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.28);
+}
+
+.scale-page .controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: flex-start;
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+.scale-page .field label {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+}
+
+.scale-page .kpis {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.scale-page .kpi {
+    flex: 1;
+    min-width: 180px;
+    background: #0c1322;
+    border: 1px solid var(--stroke);
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.scale-page .kpi .t {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.4px;
+}
+
+.scale-page .kpi .v {
+    margin-top: 6px;
+    font-size: 16px;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.scale-page .dropdown {
+    width: 220px;
+    position: relative;
+}
+
+.scale-page .dd-btn {
+    width: 100%;
+    background: #0c1322;
+    border: 1px solid var(--stroke);
+    color: var(--text-main);
+    padding: 8px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-family: 'Orbitron', 'Roboto', sans-serif;
+}
+
+.scale-page .dd-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    max-height: 260px;
+    overflow: auto;
+    background: #0c1322;
+    border: 1px solid var(--stroke);
+    border-radius: 12px;
+    display: none;
+    z-index: 9999;
+    text-align: left;
+}
+
+.scale-page .dd-menu.open {
+    display: block;
+}
+
+.scale-page .dd-item {
+    padding: 9px 10px;
+    cursor: pointer;
+    font-size: 13px;
+    border-bottom: 1px solid var(--stroke);
+    color: #ffffff;
+}
+
+.scale-page .dd-item:hover {
+    background: #1a2a4a;
+}
+
+.scale-page .dd-item.active {
+    background: #223a66;
+}
+
+.scale-page .staticBox {
+    width: 220px;
+    background: #0c1322;
+    border: 1px solid var(--stroke);
+    color: var(--muted);
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-size: 13px;
+    text-align: left;
+}
+
+.scale-page svg {
+    display: block;
+    width: 100%;
+    background-color: #000000;
+}
+
+.scale-page svg text {
+    font-family: 'Orbitron', 'Roboto', sans-serif;
+    fill: #cde1ff;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+}
+
+.scale-page .axis path,
+.scale-page .axis line {
+    stroke: white;
+}
+
+.scale-page .axis text {
+    fill: white;
+}
+
 
 .two-vis-container {
   display: flex;
