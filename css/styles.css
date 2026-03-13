@@ -366,6 +366,7 @@ button.navBtn {
   background: #bbfcf7;
   height: 6px;
   margin-top: 2px;
+  border-radius: 4px;
 }
 
 .noUi-handle::after, .noUi-handle::before {
@@ -441,7 +442,7 @@ button.navBtn {
 /* Planet subclasses */
 #chart-area .planet.mercury { fill: #b7b7b7; --scale: 0.55; stroke: #79878c }
 #chart-area .planet.venus   { fill: #d7b36a; --scale: 0.90; stroke: #c18b5c }
-#chart-area .planet.earth   { fill: #4a90e2; --scale: 0.95; stroke: #2a82b9}
+#chart-area .planet.earth   { fill: #278fc7; --scale: 0.95; stroke: #1a79b4}
 #chart-area .planet.mars    { fill: #c65a3a; --scale: 0.70; stroke: #ae3b29}
 
 #chart-area .planet.jupiter { fill: #caa07a; --scale: 2.20; stroke: #b27963}
