@@ -18,6 +18,9 @@ let selectableBodies = [];
 let selectedA = null;
 let earthBody = null;
 
+let numA = 1;
+let numB = 1;
+
 const ddA = d3.select("#ddA");
 
 function normalizeName(name) {
@@ -93,6 +96,45 @@ d3.select("#scale-go-button").on("click", function(event) {
     updateAll();
 })
 
+// num planets
+d3.select("#planet-1").on("click", function(event) {
+    numA = numA + 1;
+    updateAll();
+})
+
+d3.select("#planet-10").on("click", function(event) {
+    numA = numA + 10;
+    updateAll();
+})
+
+d3.select("#planet-100").on("click", function(event) {
+    numA = numA + 100;
+    updateAll();
+})
+
+// earths
+d3.select("#earth-1").on("click", function(event) {
+    numB = numB + 1;
+    updateAll();
+})
+
+d3.select("#earth-10").on("click", function(event) {
+    numB = numB + 10;
+    updateAll();
+})
+
+d3.select("#earth-100").on("click", function(event) {
+    numB = numB + 100;
+    updateAll();
+})
+
+// clear button
+d3.select("#clear-all-scale").on("click", function(event) {
+    numA = 1;
+    numB = 1;
+    updateAll();
+})
+
 function buildDropdown(items) {
     ddA.html("");
 
@@ -124,7 +166,12 @@ function buildDropdown(items) {
             .text(d => getName(d))
             .on("click", function(_, d) {
                 selectedA = d;
-                console.log("called funciton a", d)
+                console.log(selectedA)
+                numA = 1;
+                numB = 1;
+                d3.select("#add-planet-text")
+                    .text(`Add ${selectedA.eName}s`)
+                console.log("called function a", d)
                 menu.classed("open", false);
                 refreshButton();
                 refreshMenu();
@@ -165,15 +212,22 @@ function drawScale() {
     const massB = getMass(earthBody);
 
     // get number of each body set by the user
-    const numA = d3.select("#num-bodies").node().value;
-    const numB = d3.select("#num-earths").node().value;  
+    // const numA = d3.select("#num-bodies").node().value;
+    // const numB = d3.select("#num-earths").node().value;  
 
+    // gotta have somethign where the sign depends on which is bigger or something. 
     const ratio = massB === 0 ? 1 : (massA * numA) / (massB * numB);
 
-    const theta = Math.max(-75, Math.min(75, Math.log10(Math.max(ratio, 1e-6)) * 24)) / 75;
+    // let addY = 300 * (ratio < 1 ? ratio : - 1 / ratio);
 
-    // sin function for nicer scaling
-    const addY = Math.max(Math.min(Math.sin(theta) * 300, 170), -170)
+    const tilt = Math.max(-75, Math.min(75, Math.log10(Math.max(ratio, 1e-6)) * 24)) / 75;
+
+    // console.log(theta)
+
+    // // sin function for nicer scaling
+    // const addY = Math.max(Math.min(Math.sin(theta) * 300, 170), -170)
+    const addY = Math.max(Math.min(tilt * 300, 170), -170)
+    // const addY = theta * 300
     console.log(addY)
 
     const leftY = beamY + addY;
@@ -411,8 +465,8 @@ function drawScale() {
             .attr("y", rightLabelAttrs.y);
     }
 
-    leftLabel.text(getName(selectedA));
-    rightLabel.text("Earth");
+    leftLabel.text(`${numA} ${getName(selectedA)}${numA > 1 ? 's': ''}`);
+    rightLabel.text(`${numB} Earth${numB > 1 ? 's': ''}`);
 }
 
 function updateAll() {
