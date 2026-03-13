@@ -6,16 +6,14 @@ document.addEventListener("DOMContentLoaded", function () {
     let readyToContinue = false;
     let leaving = false;
 
-    // Start fade-in after the browser paints once
     requestAnimationFrame(function () {
         page.classList.add("is-visible");
     });
 
-    // Let the text fade in first, then show the hint
     window.setTimeout(function () {
         readyToContinue = true;
         hint.classList.add("is-visible");
-    }, 900);
+    }, 1100);
 
     function goToNextPage() {
         if (!readyToContinue || leaving) return;
