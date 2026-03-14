@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/styles.css">
+
+</head>
+<body>
+<section class="vis-section" id="scale-section">
+    <section class="scale-page">
+    <div class="wrap">
+      <h1>How Massive Is Each Planet Compared to Earth?</h1>
+
+      <div class="panel">
+        <div class="controls">
+          <div class="field">
+            <label>Select a planet to compare with the Earth!</label>
+            <div id="ddA" class="dropdown"></div>
+          </div>
+          <div>
+            <p id="add-planet-text">Add Jupiters</p>
+            <button id="planet-1">+1</button>
+            <button id="planet-10">+10</button>
+            <button id="planet-100">+100</button>
+          </div>
+
+          <div>
+            <p id="add-earth-text">Add Earths</p>
+            <button id="earth-1">+1</button>
+            <button id="earth-10">+10</button>
+            <button id="earth-100">+100</button>
+          </div>
+
+          <div>
+            <button id="clear-all-scale">Clear All</button>
+          </div>
+        </div>
+
+        <svg id="vis" width="100%" height="420"></svg>
+      </div>
+    </div>
+  </section>
+
+  <script src="scale/js/mass.js"></script>
+</section>
+    
+<section class="vis-section" id="vis1-section">
+    <div class="vis1-container" style="text-align: center;">
+        <h1 class="title">Bigger solar system objects were discovered first!</h1>
+        <h3 class="title">We first discovered things we could see with the naked eye - planets large in mass and volume</h3>
+        <button id="resetButton" aria-label="Reset visualization"></button>
+        <svg id="viz" width="600" height="600"></svg>
+        <script src="vis1/js/complete1.js"></script>
+    </div>
+
+        <div class="vis2-container" style="margin-top: 50px; text-align: center;">
+        <h3>Timeline of discoveries</h2>
+        <svg id="timelineSvg" width="800" height="200"></svg>
+        </div>
+
+        <h4>
+        First we just noticed big stars and planets, then we started asking questions.
+        </h4>
+        <h4>
+        Discovering gravity and the rules of the solar system let us see not just what is, but what will be...
+        </h4>
+</section>
+
+<section class="transition-body">
+    <section class="vis2 transition-page" id="transitionPage" aria-label="Transition to next visualization">
+    <div class="wrap transition-wrap">
+    <div class="panel transition-panel">
+
+      <div class="transition-stars" aria-hidden="true">
+        <span class="star star-1"></span>
+        <span class="star star-2"></span>
+        <span class="star star-3"></span>
+        <span class="star star-4"></span>
+        <span class="star star-5"></span>
+        <span class="star star-6"></span>
+      </div>
+
+      <div class="transition-content">
+        <div class="transition-copy">
+          <p class="transition-message" id="transitionMessage">
+            Have you noticed how large and heavy Neptune is?
+            Even so, it was not discovered until scientists understood
+            <span class="gravity-highlight">gravity</span>.
+          </p>
+
+          <div class="transition-visual" aria-hidden="true">
+                <div class="neptune-scene">
+                <div class="orbit orbit-1"></div>
+                <div class="orbit orbit-2"></div>
+                <div class="orbit orbit-3"></div>
+
+                <div class="neptune-glow"></div>
+                <div class="neptune-core"></div>
+                </div>
+            </div>
+
+            <!-- <p class="transition-hint" id="transitionHint">
+                Click anywhere to continue
+            </p> -->
+            </div>
+        </div>
+
+        </div>
+    </div>
+    </section>
+
+    <script src="transition/js/transition.js"></script>
+</section>
+
+<section class="vis-section" id="vis3-section">
+    <h1>How different surface gravity affects a throw?</h1>
+
+    <div id="vis3"></div>
+
+    <script src="../vis3/js/main.js"></script>
+
+</section>
+
+<section class="vis-section" id="vis4-section">
+    <h1 class="title">Which bodies have the least circular orbits?</h1>
+    <p id="description">The <strong>eccentricity</strong> of an orbit is a number that measures how "un-circular" the orbit is.</p>
+    <p id="description">Earth's orbit has a low eccentricity, which means it is nearly circular. This is included as a point of comparison.</p>
+
+    <div style="position: relative; width: 1100px; margin: 0 auto;">
+        <div id="tooltip"></div>
+        <div id="vis4"></div>
+        
+        <div class="controls-side" style="position: absolute; top: 400px; right: 0px;">
+        <button id="orbit-toggle" >
+            Start Orbits
+        </button>
+        <button id="reset-btn" disabled>
+            Reset Orbits
+        </button>
+
+        <div class="slider-container">
+            <label for="speed-slider">Warp Speed</label>
+            <input type="range" id="speed-slider" min="0.1" max="5" step="0.1" value="1">
+            <span id="speed-value">1x</span>
+        </div>
+        </div>
+    </div>
+
+    <script src="../vis4/js/main.js"></script>
+</section>
+
+<section class="vis-section" id="vis2-section">
+    <h1>Orbit map of solar system</h1>
+    <p>Click and drag on the timeline to select a time range and see what objects were discovered during this period!
+    </p>
+    <!-- slider stuff -->
+
+    <div id="timebar"></div>
+
+    <div id="chart-area"></div>
+
+    <script src=" https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.js "></script>
+    <link href=" https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.css " rel="stylesheet">
+    <script src="vis2/js/main_vis.js"></script>
+    <script src="vis2/js/orbit_data.js"></script>
+</section>
+
+<section class="transition-body ending-body">
+    <section class="vis2 transition-page ending-page" id="endingPage" aria-label="Ending page">
+    <div class="wrap transition-wrap ending-wrap">
+
+        <div class="transition-stars" aria-hidden="true">
+        <span class="star star-1"></span>
+        <span class="star star-2"></span>
+        <span class="star star-3"></span>
+        <span class="star star-4"></span>
+        <span class="star star-5"></span>
+        <span class="star star-6"></span>
+        </div>
+
+        <img
+                src="img/telescope.png"
+                alt=""
+                class="ending-telescope"
+                aria-hidden="true"
+        />
+
+        <div class="ending-stage" aria-live="polite">
+        <p class="ending-line" id="line1">
+            We once thought the solar system was fully mapped.
+        </p>
+
+        <p class="ending-line" id="line2">
+            But in August 2025, astronomers using NASA’s James Webb Space Telescope
+            identified a new moon of Uranus
+            <span class="ending-highlight">S/2025 U1</span>.
+        </p>
+
+        <p class="ending-line" id="line3">
+            Even now, there is more to discover!
+        </p>
+        </div>
+
+        <p class="transition-hint ending-hint" id="endingHint">
+        Click anywhere
+        </p>
+
+        <noscript>
+        <p class="transition-hint transition-hint-static ending-noscript">
+            <a href="../vis1/index.html">Continue</a>
+        </p>
+        </noscript>
+
+    </div>
+    </section>
+
+    <script src="ending/js/ending.js"></script>
+</section>
+
+</body>
+</html>

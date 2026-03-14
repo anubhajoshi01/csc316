@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("line3")
     ];
 
-    const NEXT_PAGE = "../vis1/index.html";
+    // const NEXT_PAGE = "../vis1/index.html";
 
     let currentIndex = 0;
     let ready = false;
@@ -28,24 +28,25 @@ document.addEventListener("DOMContentLoaded", function () {
         lines[index].classList.remove("is-leaving");
     }
 
-    function goToNextPage() {
-        if (leaving) return;
+    // function goToNextPage() {
+    //     if (leaving) return;
 
-        leaving = true;
-        hint.classList.remove("is-visible");
-        page.classList.add("is-fading-out");
+    //     leaving = true;
+    //     hint.classList.remove("is-visible");
+    //     page.classList.add("is-fading-out");
 
-        window.setTimeout(function () {
-            window.location.href = NEXT_PAGE;
-        }, 800);
-    }
+    //     window.setTimeout(function () {
+    //         window.location.href = NEXT_PAGE;
+    //     }, 800);
+    // }
 
     function handleAdvance() {
         if (!ready || animating || leaving) return;
 
         // Last line is already shown -> leave page
         if (currentIndex === lines.length - 1) {
-            goToNextPage();
+            // goToNextPage();
+            d3.select("#endingHint").text("Thanks for reading!").classed("is-visible", true);
             return;
         }
 

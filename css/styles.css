@@ -117,9 +117,9 @@ button.navBtn {
 /* ================================================= */
 
 #resetButton {
-  position: fixed;
+  position: absolute;
   top: 20px;
-  right: 20px;
+  right: 150px;
   width: 42px;
   height: 42px;
   background: black;
@@ -147,6 +147,9 @@ button.navBtn {
 /* ================================================= */
 /* ================= VIS 1 + VIS 2 LAYOUT ========== */
 /* ================================================= */
+#vis1-section {
+    position: relative;
+}
 
 .two-vis-container {
   display: flex;
@@ -314,6 +317,171 @@ button.navBtn {
   padding: 8px 10px;
   border-radius: 10px;
   font-size: 13px;
+}
+
+.scale-page {
+    min-height: 100vh;
+    background: #000000;
+    color: #e8e8f0;
+}
+
+.scale-page .wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 40px 20px 20px;
+}
+
+.scale-page h1 {
+    font-family: 'Orbitron', 'Roboto', sans-serif;
+    color: #cde1ff;
+    letter-spacing: 0.6px;
+    font-weight: 600;
+    text-align: center;
+    margin: 0 0 20px 0;
+}
+
+.scale-page .panel {
+    background: var(--panel);
+    border: 1px solid var(--stroke);
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.28);
+}
+
+.scale-page .controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: flex-start;
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+.scale-page .field label {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+}
+
+.scale-page .kpis {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.scale-page .kpi {
+    flex: 1;
+    min-width: 180px;
+    background: #0c1322;
+    border: 1px solid var(--stroke);
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.scale-page .kpi .t {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.4px;
+}
+
+.scale-page .kpi .v {
+    margin-top: 6px;
+    font-size: 16px;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.scale-page .dropdown {
+    width: 220px;
+    position: relative;
+}
+
+.scale-page .dd-btn {
+    width: 100%;
+    background: #0c1322;
+    border: 1px solid var(--stroke);
+    color: var(--text-main);
+    padding: 8px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-family: 'Orbitron', 'Roboto', sans-serif;
+}
+
+.scale-page .dd-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    max-height: 260px;
+    overflow: auto;
+    background: #0c1322;
+    border: 1px solid var(--stroke);
+    border-radius: 12px;
+    display: none;
+    z-index: 9999;
+    text-align: left;
+}
+
+.scale-page .dd-menu.open {
+    display: block;
+}
+
+.scale-page .dd-item {
+    padding: 9px 10px;
+    cursor: pointer;
+    font-size: 13px;
+    border-bottom: 1px solid var(--stroke);
+    color: #ffffff;
+}
+
+.scale-page .dd-item:hover {
+    background: #1a2a4a;
+}
+
+.scale-page .dd-item.active {
+    background: #223a66;
+}
+
+.scale-page .staticBox {
+    width: 220px;
+    background: #0c1322;
+    border: 1px solid var(--stroke);
+    color: var(--muted);
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-size: 13px;
+    text-align: left;
+}
+
+.scale-page svg {
+    display: block;
+    width: 100%;
+    background-color: #000000;
+}
+
+.scale-page svg text {
+    font-family: 'Orbitron', 'Roboto', sans-serif;
+    fill: #cde1ff;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+}
+
+.scale-page .axis path,
+.scale-page .axis line {
+    stroke: white;
+}
+
+.scale-page .axis text {
+    fill: white;
 }
 
 /* ================================================= */
@@ -1089,4 +1257,94 @@ input[type=range] {
     .ending-hint{
         bottom: 24px;
     }
+}
+
+/* ================================================= */
+/* ===================== VIS 3 ==================== */
+/* ================================================= */
+
+#vis3 .ctrlBar {
+    margin-top: 14px;
+}
+
+#vis3 .planetSelect {
+    background: #0b0f17;
+    border: 2px solid white;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 16px;
+    outline: none;
+}
+
+#vis3 .sun {
+    fill: #FDB813;
+    stroke: #E08B00;
+    stroke-width: 2px;
+    filter: drop-shadow(0 0 12px rgba(253, 184, 19, 0.7));
+}
+
+/* ========================= */
+/* Planets */
+/* ========================= */
+
+#vis3 .planet {
+    stroke: grey;
+    stroke-width: 1px;
+    opacity: 0.95;
+
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(var(--scale, 1));
+}
+
+/* Planet subclasses */
+
+#vis3 .planet.mercury { fill: #b7b7b7; --scale: 0.55; }
+#vis3 .planet.venus   { fill: #d7b36a; --scale: 0.90; }
+#vis3 .planet.earth   { fill: #4a90e2; --scale: 0.95; }
+#vis3 .planet.mars    { fill: #c65a3a; --scale: 0.70; }
+
+#vis3 .planet.jupiter { fill: #caa07a; --scale: 2.20; }
+#vis3 .planet.saturn  { fill: #e6d28a; --scale: 1.90; }
+#vis3 .planet.uranus  { fill: #76c7c0; --scale: 1.25; }
+#vis3 .planet.neptune { fill: #3b5bd6; --scale: 1.20; }
+
+#vis3 .planet.other { fill: #777; --scale: 0.45; }
+
+/* ========================= */
+/* Moons */
+/* ========================= */
+
+#vis3 .moon {
+    fill: #cccccc;
+    opacity: 0.6;
+    stroke: rgba(255, 255, 255, 0.2);
+    stroke-width: 0.5px;
+}
+
+/* ========================= */
+/* Saturn ring */
+/* ========================= */
+
+#vis3 .saturn-ring {
+    fill: none;
+    stroke: #c8be96;
+    stroke-width: 5px;
+}
+
+/* ========================= */
+/* Links */
+/* ========================= */
+
+#vis3 .planet-link {
+    stroke: #888;
+    stroke-width: 1px;
+    opacity: 0.6;
+}
+
+#vis3 .moon-link {
+    stroke: #aaa;
+    stroke-width: 0.7px;
+    opacity: 0.35;
 }

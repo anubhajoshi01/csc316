@@ -1,4 +1,4 @@
-const DATA_PATH = "data/sol_data.csv";
+const DATA_PATH = "../vis1/data/sol_data.csv";
 
 const fmtSci = d3.format(".3~s");
 const fmtRatio = (x) => {
