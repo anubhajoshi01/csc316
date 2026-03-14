@@ -57,8 +57,8 @@ function drawVis(data, planetsOnly) {
         .data(planetsData)
 
     // some manual adjustments to spread out the planets a bit more    
-    let planetShifts = { 'Mercury': -40, 'Venus': 150, 'Earth': -120, 'Mars': 75, 'Uranus': 35, '136472-Makemake': -20, '136199-Eris': -15 }
-
+    let planetShifts = {'Mercury': -40, 'Venus': 150, 'Earth': -120, 'Mars': 75, 'Uranus': 35, '136472-Makemake': -20, '136199-Eris': -15}
+    
     planets.enter()
         .append("circle")
         .attr("class", p => `planet ${p.name.toLowerCase()}`)
@@ -372,7 +372,7 @@ function onTimebarUpdate(values, data) {
                 .duration(transitionDuration)
                 .style("opacity", 1)
             // d3.select("#id" + body.name).style("fill", null);
-            if (isSaturn) { d3.select("#saturn-ring").style("opacity", null) }
+            if (isSaturn) {d3.select("#saturn-ring").style("opacity", null)}
         }
         // highlight planets in the range
         else if (x >= lowerYear && x <= upperYear) {
@@ -384,7 +384,7 @@ function onTimebarUpdate(values, data) {
             d3.select("#link-" + body.name)
                 .transition()
                 .duration(transitionDuration)
-                .style("opacity", 0.7)
+                .style("opacity", 1)
                 .style("stroke", null)
             d3.select("#label-" + body.name)
                 .transition()
@@ -423,7 +423,7 @@ function onTimebarUpdate(values, data) {
                 .transition()
                 .duration(transitionDuration)
                 .style("stroke", "#2d3648")
-                .style("opacity", 1)
+                .style("opacity", 0.7)
             d3.select("#label-" + body.name)
                 .transition()
                 .duration(transitionDuration)
