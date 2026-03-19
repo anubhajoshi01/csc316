@@ -1,11 +1,35 @@
+function generateStars() {
+    const container = document.querySelector(".transition-stars");
+    const starCount = 120;
+
+    for (let i = 0; i < starCount; i++) {
+        const star = document.createElement("span");
+        star.classList.add("star");
+
+        const rand = Math.random();
+        if (rand < 0.7) star.classList.add("small");
+        else if (rand < 0.95) star.classList.add("medium");
+        else star.classList.add("large");
+
+        star.style.left = Math.random() * 98 + "%";
+        star.style.top = Math.random() * 98 + "%";
+
+        star.style.opacity = 0.3 + Math.random() * 0.7;
+
+        container.appendChild(star);
+    }
+}
+
+generateStars();
+
+
 document.addEventListener("DOMContentLoaded", function () {
-    const page = document.getElementById("endingPage");
-    const hint = document.getElementById("endingHint");
+    const page = document.getElementById("openingPage");
+    const hint = document.getElementById("openingHint");
     const lines = [
         document.getElementById("line1"),
         document.getElementById("line2"),
-        document.getElementById("line3"),
-        document.getElementById("line4")
+        document.getElementById("line3")
     ];
 
     const NEXT_PAGE = "../scale/index.html";
@@ -44,14 +68,12 @@ document.addEventListener("DOMContentLoaded", function () {
     function handleAdvance() {
         if (!ready || animating || leaving) return;
 
-        // Last line is already shown -> leave page
         if (currentIndex === lines.length - 1) {
             goToNextPage();
             return;
         }
 
         animating = true;
-
         hideLine(currentIndex);
 
         window.setTimeout(function () {
