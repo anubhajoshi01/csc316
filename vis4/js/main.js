@@ -58,7 +58,7 @@ function createPanel(group, panel) {
         .attr("text-anchor", "middle")
         .attr("font-size", 20)
         .attr("font-weight", "bold")
-        .text(panel.name);
+        .text("Orbiting " + panel.name);
 
     // Sun note
     if (panel.name === "Sun") {
@@ -83,7 +83,26 @@ function drawCentralBody(group, x, y, body) {
         .attr("cy", y)
         .attr("r", radiusScale(body.meanRadius))
         .attr("fill", centralColors[body.eName])
-        .attr("stroke", body.eName === "Sun" ? "orange" : "black");
+        .attr("stroke", body.eName === "Sun" ? "orange" : "black")
+        .on("mouseover", function(event) {
+                const tooltip = d3.select("#tooltip");
+
+                tooltip.style("display", "block", )
+                    .html(`
+                        <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 4px; color: #4da9df;">
+                            ${body.eName}
+                        </div>
+                        <div style="border-top: 1px solid rgba(255,255,255,0.2); margin-bottom: 4px;"></div>
+                    `);
+            })
+            .on("mousemove", function(event) {
+                d3.select("#tooltip")
+                    .style("left", (event.pageX - 550) + "px")
+                    .style("top", (event.pageY - 150) + "px");
+            })
+            .on("mouseout", function() {
+                d3.select("#tooltip").style("display", "none");
+            });
 }
 
 
@@ -183,37 +202,39 @@ function drawOrbitingBodies(group, panel, centralBody, orbiters) {
 // ==========================
 // Legend
 // ==========================
-function createLegend(svg, mostEccentric) {
+function createLegend(mostEccentric) {
+    // Clear any existing legend first
+    const legend = d3.select("#legend");
 
-    const legend = svg.append("g")
-        .attr("transform", `translate(870,60)`)
-        .attr("id", "legend");
-
-    legend.append("text")
-        .text("Orbiting Bodies")
-        .attr("font-size", 16)
-        .attr("font-weight", "bold")
-        .attr("y", -20);
+    legend.append("p")
+        .attr("id", "legend-title")
+        .attr("class", "legend-title")
+        .text("ORBITING BODIES");
 
     const items = legend.selectAll(".legend-item")
         .data(mostEccentric)
         .enter()
-        .append("g")
-        .attr("transform", (d,i) => `translate(0,${i*30})`);
+        .append("div")
+        .attr("class", "legend-item");
 
-    items.append("circle")
-        .attr("r", 8)
-        .attr("fill", d => colorScale(d.eName))
-        .attr("stroke", "#333");
+    // Colored Dot
+    items.append("div")
+        .attr("class", "legend-color-dot")
+        .style("background-color", d => colorScale(d.eName));
 
-    items.append("text")
-        .attr("x", 20)
-        .attr("y", 5)
-        .attr("font-size", 14)
-        .text((d,i) =>
-            d.discoveryDate !== "NA"
-            ? `${i+1}. ${d.eName} (${d.discoveryDate})`
-            : `${i+1}. ${d.eName}`
+    // Text Wrapper
+    const textGroup = items.append("div")
+        .attr("class", "legend-text-group");
+
+    textGroup.append("span")
+        .attr("class", "legend-name")
+        .text(d => d.eName);
+
+    textGroup.append("span")
+        .attr("class", "legend-discovery")
+        .text(d => d.discoveryDate !== "NA" 
+            ? `Discovered: ${d.discoveryDate}` 
+            : "Known since Antiquity"
         );
 }
 
@@ -269,7 +290,7 @@ d3.csv("data/sol_data.csv").then(data => {
         drawOrbitingBodies(g,panel,centralBody,orbiters);
     });
 
-    createLegend(svg, mostEccentric);
+    createLegend(mostEccentric);
 });
 
 function formatSpaceDate(dateStr) {
