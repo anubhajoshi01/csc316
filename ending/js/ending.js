@@ -4,9 +4,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const lines = [
         document.getElementById("line1"),
         document.getElementById("line2"),
-        document.getElementById("line3"),
-        document.getElementById("line4")
+        document.getElementById("line3")
     ];
+    const backButton = document.getElementById("backButton");
 
     const NEXT_PAGE = "../opening/index.html";
 
@@ -44,9 +44,15 @@ document.addEventListener("DOMContentLoaded", function () {
     function handleAdvance() {
         if (!ready || animating || leaving) return;
 
-        // Last line is already shown -> leave page
+        // Last line is already shown -> move it up and show button
         if (currentIndex === lines.length - 1) {
-            goToNextPage();
+            animating = true;
+            lines[currentIndex].classList.add("is-sliding-up");
+            
+            window.setTimeout(function () {
+                backButton.classList.add("is-visible");
+                animating = false;
+            }, 1125);
             return;
         }
 
