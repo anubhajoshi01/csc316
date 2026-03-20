@@ -1350,28 +1350,27 @@ input[type=range] {
     text-align: center;
 
     padding: 0;
-    background: none;
-    border: none;
-    box-shadow: none;
-    backdrop-filter: none;
 
     transform: translateY(-80px);
 }
 
+.opening-highlight-block{
+    display: block;
+    margin-top: 12px;
+}
+
 .opening-line{
     position: absolute;
-    inset: 0;
-    margin: auto;
+    top: 50%;
+    left: 50%;
 
     max-width: 900px;
+    width: 100%;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
     text-align: center;
 
     opacity: 0;
-    transform: translateY(24px);
+    transform: translate(-50%, calc(-70% + 24px));
 
     font-size: clamp(32px, 3.5vw, 64px);
     font-weight: 800;
@@ -1388,12 +1387,12 @@ input[type=range] {
 
 .opening-line.is-visible{
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translate(-50%, -60%) scale(1);
 }
 
 .opening-line.is-leaving{
     opacity: 0;
-    transform: translateY(-18px) scale(0.99);
+    transform: translate(-50%, calc(-60% - 18px)) scale(0.99);
 }
 
 .opening-highlight{
