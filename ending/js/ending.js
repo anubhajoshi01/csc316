@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("line4")
     ];
 
-    const NEXT_PAGE = "../scale/index.html";
+    const NEXT_PAGE = "../opening/index.html";
 
     let currentIndex = 0;
     let ready = false;
