@@ -92,6 +92,49 @@ button.navBtn {
   box-shadow: 0 6px 20px rgba(0,255,255,0.5);
 }
 
+.navBtn.nav-left {
+  position: fixed;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+
+  background-color: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  padding: 20px 30px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1000;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.navBtn.nav-left:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+/* Right navigation (isolated) */
+.navBtn.nav-right {
+  position: fixed;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+
+  background-color: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  padding: 20px 30px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1000;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.navBtn.nav-right:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
 /* add planets buttons */
 button.add-planet {
   background: #000;
@@ -196,6 +239,7 @@ button.add-planet {
 #resetButton:active {
   transform: rotate(-180deg) scale(0.95);
 }
+/* 
 
 /* ================================================= */
 /* ================= VIS 1 + VIS 2 LAYOUT ========== */
@@ -1316,3 +1360,82 @@ input[type=range] {
         bottom: 24px;
     }
 }
+
+.ctrlBar {
+    margin-top: 14px;
+}
+
+.planetSelect {
+    background: #0b0f17;
+    border: 2px solid white;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 16px;
+    outline: none;
+}
+.sun {
+    fill: #FDB813;
+    stroke: #E08B00;
+    stroke-width: 2px;
+    filter: drop-shadow(0 0 12px rgba(253, 184, 19, 0.7));
+}
+
+/* ========================= */
+/* Planets */
+/* ========================= */
+
+.planet {
+    stroke: grey; /* lighter stroke for dark bg */
+    stroke-width: 1px;
+    opacity: 0.95;
+
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(var(--scale, 1));
+}
+
+.moon {
+    fill: #cccccc;
+    opacity: 0.6;
+    stroke: rgba(255, 255, 255, 0.2);
+    stroke-width: 0.5px;
+}
+
+/* ========================= */
+/* Saturn ring */
+/* ========================= */
+
+.saturn-ring {
+    fill: none;
+    stroke: #c8be96;
+    stroke-width: 5px;
+}
+
+/* ========================= */
+/* Links */
+/* ========================= */
+
+.planet-link {
+    stroke: #888;
+    stroke-width: 1px;
+    opacity: 0.6;
+}
+
+.moon-link {
+    stroke: #aaa;
+    stroke-width: 0.7px;
+    opacity: 0.35;
+}
+
+.planet.mercury { fill: #b7b7b7; --scale: 0.55; }
+.planet.venus   { fill: #d7b36a; --scale: 0.90; }
+.planet.earth   { fill: #4a90e2; --scale: 0.95; }
+.planet.mars    { fill: #c65a3a; --scale: 0.70; }
+
+.planet.jupiter { fill: #caa07a; --scale: 2.20; }
+.planet.saturn  { fill: #e6d28a; --scale: 1.90; }
+.planet.uranus  { fill: #76c7c0; --scale: 1.25; }
+.planet.neptune { fill: #3b5bd6; --scale: 1.20; }
+
+.planet.other { fill: #777; --scale: 0.45; }
