@@ -1249,8 +1249,8 @@ input[type=range] {
     color: #e8eefc;
 
     transition:
-            opacity 0.75s ease,
-            transform 0.75s ease;
+            opacity 1.125s ease,
+            transform 1.125s ease;
 }
 
 .ending-line.is-visible{
@@ -1310,6 +1310,41 @@ input[type=range] {
     bottom: 42px;
     transform: translateX(-50%);
     z-index: 3;
+}
+
+.ending-line.is-sliding-up {
+    opacity: 1;
+    transform: translateY(-50px) scale(1);
+}
+
+.ending-back-button {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    opacity: 0;
+    
+    padding: 12px 32px;
+    font-size: 18px;
+    font-weight: 700;
+    background: #000;
+    color: #cde1ff;
+    border: 2px solid #cde1ff;
+    border-radius: 30px;
+    cursor: pointer;
+    text-shadow: 0 0 6px rgba(205,225,255,0.6), 0 0 12px rgba(118,199,192,0.3);
+    transition: all 0.45s ease;
+    z-index: 3;
+}
+
+.ending-back-button:hover {
+    transform: translateX(-50%) translateY(18px);
+    box-shadow: 0 6px 20px rgba(0,255,255,0.5);
+}
+
+.ending-back-button.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
 
 @keyframes telescopeFloat{
