@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transition</title>
+    <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body class="transition-body">
+
+<button
+        onclick="window.location.href='../vis3/index.html'"
+        class="navBtn nav-left"
+>
+    &lt;
+</button>
+
+<button
+        onclick="window.location.href='../vis4/index.html'"
+        class="navBtn nav-right"
+>
+    &gt;
+</button>
+
+<section class="transition-page" id="transitionPage" aria-label="Transition to next visualization">
+    <div class="wrap transition-wrap">
+        <div class="transition-panel">
+
+            <div class="transition-stars" aria-hidden="true">
+                <span class="star star-1"></span>
+                <span class="star star-2"></span>
+                <span class="star star-3"></span>
+                <span class="star star-4"></span>
+                <span class="star star-5"></span>
+                <span class="star star-6"></span>
+            </div>
+
+            <div class="transition-content">
+                <div class="transition-copy">
+                    <p class="transition-message" id="transitionMessage">
+                        On the surface, <span class="gravity-highlight">gravity</span> controls the path of a ball.
+                        In space, it helps define the paths of moons and planets.
+                    </p>
+
+                    <p class="transition-hint" id="transitionHint">
+                        Click anywhere to continue
+                    </p>
+
+                    <noscript>
+                        <p class="transition-hint transition-hint-static">
+                            <a href="../vis4/index.html">Continue to the next visualization</a>
+                        </p>
+                    </noscript>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script src="js/transition2.js"></script>
+</body>
+</html>
