@@ -83,6 +83,7 @@ function drawVis(data, planetsOnly) {
         })
         .attr("cx", (p, i) => xScale(p.semi_major_axis) - 35)
         .attr("r", 8)
+        .style("opacity", 0)
         .on('mouseover', function (event, p) {
             if (d3.select(this).style("opacity") != 0) {
                 let discoveryDate = isNaN(p.discovery_year) ?
@@ -121,6 +122,7 @@ function drawVis(data, planetsOnly) {
         .attr("y1", SUN_Y)
         .attr("x2", p => +d3.select("#id" + p.name).attr("cx"))
         .attr("y2", p => +d3.select("#id" + p.name).attr("cy"))
+        .style("opacity", 0)
         .lower();
 
     // Saturn ring
@@ -148,6 +150,7 @@ function drawVis(data, planetsOnly) {
         .attr("text-anchor", (p) => moonlessPlanets.includes(p.name) ? "start" : "end")
         .attr("x", (p) => +d3.select("#id" + p.name).attr("cx") + (moonlessPlanets.includes(p.name) ? 12 : -15))
         .attr("y", (p) => +d3.select("#id" + p.name).attr("cy") + 5)
+        .style("opacity", 0)
 
     // build moon-free safe zones around every planet and its label
     const PLANET_SAFE_RADIUS = 30;
@@ -263,6 +266,7 @@ function drawVis(data, planetsOnly) {
         .attr("cy", (m) => m._moonY)
         .attr("cx", (m) => m._moonX)
         .attr("r", 4)
+        .style("opacity", 0)
         .on('mouseover', function (event, m) {
             console.log("hovering over", m)
             if (d3.select(this).style("opacity") != 0) {
@@ -308,6 +312,7 @@ function drawVis(data, planetsOnly) {
             .attr("y1", +host.attr("cy"))
             .attr("x2", +moon.attr("cx"))
             .attr("y2", +moon.attr("cy"))
+            .style("opacity", 0)
             .lower();
     });
     // add year ranges, for timeline bar at the top 
