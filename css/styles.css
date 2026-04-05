@@ -1299,6 +1299,16 @@ input[type=range] {
 /* ===================== ending ==================== */
 /* ================================================= */
 
+.moon-highlight {
+    display: inline;
+    white-space: nowrap;
+    font-weight: 800;
+    color: #ffe66d;
+    text-shadow:
+            0 0 8px rgba(255, 230, 109, 0.9),
+            0 0 18px rgba(255, 230, 109, 0.45);
+}
+
 .ending-body{
     background:
             radial-gradient(circle at 18% 82%, rgba(255, 185, 60, 0.06), transparent 26%),
