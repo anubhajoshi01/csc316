@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
             
             window.setTimeout(function () {
                 backButton.classList.add("is-visible");
+                backButton.disabled = false;
                 animating = false;
             }, 1125);
             return;
