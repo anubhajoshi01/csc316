@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const page = document.getElementById("transitionPage");
     const hint = document.getElementById("transitionHint");
-    const nextPage = "../vis2/index.html";
+    const nextPage = "../vis2/";
 
     let readyToContinue = false;
     let leaving = false;

@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("line3")
     ];
 
-    const NEXT_PAGE = "../scale/index.html";
+    const NEXT_PAGE = "../scale/";
 
     let currentIndex = 0;
     let ready = false;

@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ];
     const backButton = document.getElementById("backButton");
 
-    const NEXT_PAGE = "../opening/index.html";
+    const NEXT_PAGE = "../opening/";
 
     let currentIndex = 0;
     let ready = false;
