@@ -4,6 +4,9 @@ Team Banana — CSC316 final project. An interactive visual tour of the solar sy
 
 Entry point: [`index.html`](index.html) (redirects to [`opening/`](opening/)). Each section lives in its own directory and is navigable via the shared nav bar at the top of every page.
 
+A demo video: https://www.youtube.com/watch?v=788yj-AfzbE
+Github page: https://anubhajoshi01.github.io/csc316/opening/
+
 ## Project structure
 
 Each folder below is a section of the experience. All HTML, CSS, and JS inside them was written by us unless noted otherwise.
