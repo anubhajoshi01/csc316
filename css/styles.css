@@ -1437,6 +1437,7 @@ input[type=range] {
 }
 
 .ending-back-button {
+    pointer-events: none;
     position: absolute;
     bottom: 60px;
     left: 50%;
@@ -1462,6 +1463,7 @@ input[type=range] {
 }
 
 .ending-back-button.is-visible {
+    pointer-events: auto;
     opacity: 1;
     transform: translateX(-50%) translateY(0);
 }

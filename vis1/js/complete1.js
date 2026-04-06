@@ -21,7 +21,7 @@ function getPlanetColor(name) {
 
 let visualSizeMap = {}; // maps planet name -> visual radius
 
-d3.csv("data/sol_data.csv").then(raw => {
+d3.csv("../data/sol_data.csv").then(raw => {
   // Convert volumes to numbers
   raw.forEach(d => { d.volume = +d.volume; });
 
@@ -313,7 +313,7 @@ function updateTimeline() {
 
   // --- Draw Function ---
   function draw(body) {
-    d3.csv("data/sol_data.csv").then(raw => {
+    d3.csv("../data/sol_data.csv").then(raw => {
       raw.forEach(d => { d.volume = +d.volume; d.discoveryDate = d.discoveryDate; });
 
       const sun = raw.find(d => d.eName === body);

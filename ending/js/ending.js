@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ];
     const backButton = document.getElementById("backButton");
 
-    const NEXT_PAGE = "../opening/index.html";
+    const NEXT_PAGE = "../opening/";
 
     let currentIndex = 0;
     let ready = false;
@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
             
             window.setTimeout(function () {
                 backButton.classList.add("is-visible");
+                backButton.disabled = false;
                 animating = false;
             }, 1125);
             return;
