@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const svg = d3.select("#timelineSvg");
     const width = +svg.attr("width");
     const height = +svg.attr("height");
-    const margin = {top: -10, right: 20, bottom: 60, left: 60};
+    const margin = {top: -90, right: 20, bottom: 60, left: 60};
     const plotWidth = width - margin.left - margin.right;
     const plotHeight = height - margin.top - margin.bottom;
 
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const label = svg.append("text")
       .attr("x", width / 2)
-      .attr("y", 20)
+      .attr("y", 90)
       .attr("text-anchor", "middle")
       .text("Timeline of Discoveries");
 
@@ -129,7 +129,7 @@ function updateTimeline() {
   const svg = d3.select("#timelineSvg");
   const width = +svg.attr("width");
   const height = +svg.attr("height");
-  const margin = { top: 20, right: 20, bottom: 60, left: 60 };
+  const margin = { top: -90, right: 20, bottom: 60, left: 60 };
   const plotWidth = width - margin.left - margin.right;
   const plotHeight = height - margin.top - margin.bottom;
   const yLine = plotHeight / 2;
@@ -141,7 +141,7 @@ function updateTimeline() {
   const pointsGroup = svg
     .append("g")
     .attr("id", "timelinePoints")
-    .attr("transform", `translate(${margin.left}, 5)`);
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
   const centuries = ["Antiquity", "1600s", "1700s", "1800s", "1900s", "2000s"];
   const xScale = d3.scalePoint()
