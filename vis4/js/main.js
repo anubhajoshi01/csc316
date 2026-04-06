@@ -242,7 +242,7 @@ function createLegend(mostEccentric) {
 // ==========================
 // Load Data
 // ==========================
-d3.csv("data/sol_data.csv").then(data => {
+d3.csv("../data/sol_data.csv").then(data => {
 
     data.forEach(d => {
         d.eccentricity = +d.eccentricity;

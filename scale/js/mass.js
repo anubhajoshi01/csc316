@@ -1,4 +1,4 @@
-const DATA_PATH = "data/sol_data.csv";
+const DATA_PATH = "../data/sol_data.csv";
 
 const svg = d3.select("#vis");
 const width = 960;

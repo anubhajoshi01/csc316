@@ -45,4 +45,4 @@ function orbitData(csvPath, discardNonPlanets = true) {
     });
 }
 
-orbitData('data/sol_data.csv', false)
+orbitData('../data/sol_data.csv', false)
