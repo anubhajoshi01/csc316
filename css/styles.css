@@ -62,13 +62,13 @@ h2, h3, h4, p {
 }
 
 .nav-link {
+    cursor: pointer;
     stroke:#cde1ff;
     stroke-width: 2px;
     fill: rgb(0, 0, 0);
 }
 
 .nav-link:hover {
-    cursor: pointer;
     transition: 0.1s;
     /* fill: #1c376e; */
     r: 7px;
